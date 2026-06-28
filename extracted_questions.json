@@ -1,0 +1,277 @@
+[
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 1",
+    "body": "Enforce a prepared AppArmor profile on a specific worker node and deploy a Pod using it:\nApply the\nnginx-profile-2\nAppArmor profile on the worker node\nnode-01\n.\nEdit the Pod manifest to reference this profile.\nDeploy the Pod on\nnode-01\nand ensure the profile is applied correctly."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 2",
+    "body": "Create a NetworkPolicy named\ndeny-all\nin the\ntesting\nnamespace that blocks all ingress and egress traffic for all pods in the namespace."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 3",
+    "body": "A Pod\nnginx-pod\nis running in the\ndefault\nnamespace and uses a token by default.\nModify the default\nServiceAccount\nto disable automatic token mounting.\nCreate a Secret of type\nkubernetes.io/service-account-token\nthat references the default ServiceAccount.\nEdit the Pod to:\nUse the default ServiceAccount.\nMount the token from the Secret at\n/var/run/secrets/kubernetes.io/serviceaccount/token\n."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 4",
+    "body": "The cluster’s API server was temporarily configured to allow\nunauthenticated + unauthorized access\n(\nanonymous\nuser had\ncluster-admin\n).\nRe-secure the cluster so that\nonly authenticated and authorized REST requests\nare allowed.\nRequirements:\nUse authorization mode\nNode,RBAC\n.\nUse admission controller\nNodeRestriction\n.\nDisable\n--anonymous-auth\n.\nRemove\nClusterRoleBinding\nthat grants access to\nsystem:anonymous\n.\nAfter the fix, use the\noriginal kubeconfig\n/etc/kubernetes/admin.conf\nfor authenticated kubectl access."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 5",
+    "body": "Enable Kubernetes audit logging with custom retention and policy rules:\nStore audit logs at\n/var/log/kubernetes-logs.log\n.\nRetain logs for 5 days, maximum 10 old files, 100 MB per file.\nExtend audit policy to:\nLog CronJob changes at RequestResponse level.\nLog request bodies for deployments in\nkube-system\nnamespace.\nLog all other core and extensions resources at Request level.\nExclude watch requests by\nsystem:kube-proxy\non endpoints or services."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 6",
+    "body": "You are given a Dockerfile and a Pod manifest. Both contain\nsecurity best practice violations\nthat need fixing.\nRules:\nFix\ntwo issues\nin the Dockerfile.\nFix\ntwo issues\nin the Pod manifest.\nDo not add or remove fields — only edit existing ones.\nWhen a non-root user is needed, use\ntest-user\nwith UID\n5375\n.\nGiven Files\nDockerfile:\nFROM ubuntu:latest\nRUN apt-get update -y\nRUN apt-get install nginx -y\nCOPY entrypoint.sh /\nENTRYPOINT [\"/entrypoint.sh\"]\nUSER ROOT\nPod manifest:\n---\napiVersion: v1\nkind: Pod\nmetadata:\n  name: security-context-demo-2\nspec:\n  securityContext:\n    runAsUser: 1000\n  containers:\n  - name: security-context-demo-2\n    image: gcr.io/google-samples/node-hello:1.0\n    securityContext:\n      runAsUser: 0\n      privileged: true\n      allowPrivilegeEscalation: false"
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 7",
+    "body": "Fix multiple\nsecurity violations\nidentified by\nkube-bench\n.\nAPI Server:\nEnable\nRotateKubeletServerCertificate\n.\nEnable admission plugin\nPodSecurityPolicy\n.\nSet\n--kubelet-certificate-authority\nargument.\nKubelet:\nDisable anonymous authentication.\nSet\nauthorization-mode\nto\nWebhook\n.\nETCD:\nEnsure\n--auto-tls\nis not\ntrue\n.\nEnsure\n--peer-auto-tls\nis not\ntrue\n."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 8",
+    "body": "By default, Kubernetes stores Secrets in etcd in plaintext, which is\ninsecure\n.\nYour task is to\nenable encryption at rest\nfor Secrets using an\nEncryptionConfiguration\nmanifest with\nAES-CBC\nand\nidentity\nproviders, ensuring that all secrets are\nencrypted\nin etcd."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 9",
+    "body": "Ensure that all Pods in the\nprod\nnamespace follow the best practices of being\nstateless\nand\nimmutable\n. Identify and delete any Pods that store data in container volumes (\nstateful\n) or are configured as\nprivileged\n/with\nwritable root filesystems\n(\nnot immutable\n)."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 10",
+    "body": "The cluster uses containerd with\nrunc\nas the default runtime.\nIt has been prepared to support an additional runtime handler,\nrunsc\n(gVisor).\nCreate a\nRuntimeClass\nnamed\nsandboxed\nusing\nrunsc\n, and update all Pods in the\nserver\nnamespace to use this runtime.\n/home/candidate/10/runtime-class.yaml"
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 11",
+    "body": "The cluster has a container image scanner webhook but its configuration is incomplete.\nCurrent configuration is in\n/etc/kubernetes/confcontrol\ndirectory.\nEnable the ImagePolicy admission plugin, set it to deny all non-compliant images (implicit deny), and test the configuration by attempting to deploy a Pod using the\nlatest\nimage tag."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 12",
+    "body": "A Pod in the namespace\ndev-ops\nis mounting\n/var/run/docker.sock\nfrom the host.\nThis gives the container\nprivileged access to the host’s Docker daemon\n, which is a serious security risk.\nIdentify the Pod(s) mounting\ndocker.sock\nand update their Deployment(s) to remove the volume mount.\nVerify that the containers can no longer access\n/var/run/docker.sock\n."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 13",
+    "body": "Enable\nIstio Mutual TLS\n(mTLS)\nin\nSTRICT\nmode\nfor all workloads in the namespace\npayments\n.\nBefore enforcing\nmTLS\n, verify that automatic\nIstio Sidecar Injection\nis enabled for the namespace.\nAfter enforcement, confirm that all Pods communicate using\nmTLS\n."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 14",
+    "body": "The namespace\nsecure-team\nis configured with\nPod Security Admission\nlabel enforcing\nrestricted\nprofile.\nYou are given a Deployment manifest\n/home/masters/insecure-deployment.yaml\nthat fails to start because it violates the\nrestricted\nPod Security Standard.\nYour task is to edit the YAML to fix each of these issues and get the Deployment running successfully in\nsecure-team\nnamespace."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 15",
+    "body": "One of the worker nodes in the cluster,\nworker-1\n, is running Kubernetes version\nv1.32.0\n, while the control plane has already been upgraded to\nv1.33.0\n.\nUpgrade\nworker-1\nto match the control plane version following secure upgrade practices."
+  },
+  {
+    "file": "d:/CKS/lab\\1. Certified Kubernetes Security Specialist (CKS) – Practice Test 1.html",
+    "header": "Question 16",
+    "body": "Cluster security monitoring revealed that a malicious container is attempting to access\n/dev/mem\n, which represents direct access to physical memory.\nSuch activity is highly dangerous as it may lead to privilege escalation or kernel bypass.\nUse\nFalco\n(or sysdig) to detect the malicious Pod and its Deployment, then scale the Deployment replicas to\n0\nto stop the workload."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 1",
+    "body": "Enforce a prepared AppArmor profile on a Kubernetes Pod:\nApply the\nnginx-deny\nAppArmor profile on a worker node.\nModify the Pod manifest to use this profile.\nDeploy the Pod and verify that the profile restricts file write operations."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 2",
+    "body": "Enable and configure Kubernetes audit logging with specific retention, size, and logging policies:\nStore audit logs at\n/var/log/kubernetes-logs.log\n.\nRetain logs for 12 days and keep a maximum of 8 old log files.\nRotate logs when they reach 200MB.\nExtend the audit policy to log:\nNamespace changes at\nRequestResponse\nlevel.\nRequest body of secret changes in the\nkube-system\nnamespace.\nAll other resources in core and extensions at\nRequest\nlevel.\n\"pods/portforward\"\nand\n\"services/proxy\"\nat\nMetadata\nlevel.\nOmit the stage\nRequestReceived\n.\nDefault all other requests at\nMetadata\nlevel."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 3",
+    "body": "Scan two container images for high and critical vulnerabilities using Trivy and save the results:\nImages to scan:\nubuntu:18.04\nregistry.k8s.io/kube-apiserver:v1.24.0\nregistry.k8s.io/kube-scheduler:v1.23.0\npostgres:12\nhttpd:2.4.49\nOnly consider vulnerabilities with severity\nHIGH\nor\nCRITICAL\n.\nStore the scan output in\n/opt/trivy-vulnerable.txt\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 4",
+    "body": "Monitor container behavior on a worker node using Falco or any similar tool to detect newly spawning and executing processes:\nAnalyze containers for at least 30 seconds using process execution filters.\nStore detected incidents in\n/opt/node-01/alerts/details\nin the format:\ntimestamp,uid/username,processName\n.\nExample of a properly formatted incident file:\n2025-08-10T17:45:17.123Z,root,init\n2025-08-10T17:45:20.124Z,1001,bash\n2025-08-10T17:45:25.125Z,1002,sleep\n2025-08-10T17:45:30.125Z,1010,curl"
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 5",
+    "body": "Create a NetworkPolicy named\nrestricted-policy\nto restrict access to the Pod\nproducts-service\nin the\ndev-team\nnamespace:\nOnly allow ingress traffic from:\nPods in the same namespace\ndev-team\n.\nPods with label\nenvironment=testing\nin any namespace."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 6",
+    "body": "Use KubeSec to scan a Pod manifest for security issues and apply suggested fixes to achieve a score of at least 4 points:\nScan the Pod manifest\nkubesec-test.yaml\nusing the KubeSec Docker image.\nApply the recommended security changes.\nVerify the manifest passes KubeSec scoring."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 7",
+    "body": "Deploy a Pod using a custom RuntimeClass:\nCreate a RuntimeClass named\nuntrusted\nusing the prepared runtime handler\nrunsc\n(gVisor).\nDeploy a Pod named\nuntrusted\nwith image\nalpine:3.18\nin the\ndefault\nnamespace.\nEnsure the Pod runs on\nnode-02\nusing the\nuntrusted\nRuntimeClass.\nCapture the output of\ndmesg\nfrom the running Pod into\n/opt/course/7/untrusted-test-dmesg\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 8",
+    "body": "Create a PodSecurityPolicy that blocks privileged Pods within a specific namespace.\nDefine a PodSecurityPolicy named\nprevent-psp-policy\nthat disallows privileged containers.\nSet up a ClusterRole\nrestrict-access-role\nthat grants access to this policy.\nAdd a ServiceAccount\npsp-restrict-sa\ninside the\nstaging\nnamespace.\nBind the ClusterRole to the ServiceAccount using a ClusterRoleBinding\nrestrict-access-bind\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 9",
+    "body": "Create a new Kubernetes user, approve its certificate, and assign namespace-specific permissions:\nCreate a user\njohn\nand generate a Certificate Signing Request (CSR).\nApprove the CSR and retrieve the signed certificate.\nCreate a Role\njohn-role\nin namespace\njohn\nto allow\nlist\n,\nget\n,\ncreate\n, and\ndelete\non\npods\nand\nsecrets\n.\nCreate a RoleBinding\njohn-role-binding\nto attach the Role to user\njohn\n.\nVerify permissions using\nkubectl auth can-i\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 10",
+    "body": "Deploy an Nginx Pod with TLS-enabled ingress in the\ntesting\nnamespace:\nCreate a TLS Secret from\nbingo.crt\nand\nbingo.key\n.\nDeploy a Pod named\nnginx-pod\nin the\ntesting\nnamespace.\nExpose the Pod with a Service.\nCreate an Ingress using TLS (\nbingo-tls\n) with host\nbingo.com\n.\nRedirect all HTTP traffic to HTTPS."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 11",
+    "body": "A CIS Benchmark scan revealed multiple violations on the API server, Kubelet, and etcd. Fix all findings by updating configuration files and restarting affected components.\nViolations to fix:\nAPI Server\nauthorization-mode\nmust not be\nAlwaysAllow\n.\nMust include\nNode\n.\nMust include\nRBAC\n.\nKubelet\nAnonymous authentication must be disabled.\nAuthorization mode must not be\nAlwaysAllow\n; should use\nWebhook\n.\netcd\n--client-cert-auth\nmust be enabled.\n--auto-tls\nmust not be enabled.\nUse valid TLS certificates (not self-signed)."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 12",
+    "body": "Retrieve the contents of the existing secret\nadmin\nin the\nsafe\nnamespace.\nStore the fields into local files:\nusername\n→\n/home/cert-masters/username.txt\npassword\n→\n/home/cert-masters/password.txt\nCreate a new secret\nnewsecret\nin the\nsafe\nnamespace with credentials:\nusername:\ndbadmin\npassword:\nmoresecurepas\nCreate a new pod that mounts this new secret.\nConstraints:\nBoth files must be created (they do not exist initially).\nDo not reuse these files for later steps — create new resources independently."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 13",
+    "body": "Identify a service running on port 389, list all its open files, and remove the binary:\nFind the process ID (PID) of the service listening on port 389.\nStore the list of all open files of the process in\n/candidate/13/files.txt\n.\nLocate the executable binary of the process and delete it."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 14",
+    "body": "Modify the existing\nRole\nbound to ServiceAccount\nsa-dev-1\n(used by Pod\nweb-pod\nin namespace\nsecurity\n) to allow\nonly\nwatch\non\nservices\n.\nCreate a new\nClusterRole\nrole-2\nto allow\nonly\nupdate\non\nnamespaces\n.\nBind it via a\nClusterRoleBinding\nnamed\nrole-2-binding\nto the ServiceAccount\nsa-dev-1\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 15",
+    "body": "A Pod\ntoken-demo\nis running in the\ndefault\nnamespace and uses the default mounted token.\nModify the default\nServiceAccount\nto disable automatic token mounting (\nautomountServiceAccountToken: false\n).\nEdit the Pod to:\nUse this ServiceAccount.\nMount a\nprojected volume\nwith the ServiceAccount token manually at\n/var/run/secrets/tokens/token.jwt\n."
+  },
+  {
+    "file": "d:/CKS/lab\\2. Certified Kubernetes Security Specialist (CKS) – Practice Test 2.html",
+    "header": "Question 16",
+    "body": "Integrate the cluster’s container image scanner to reject vulnerable images.\nConfigure the ImagePolicyWebhook admission plugin with HTTPS endpoint\nhttps://valhalla.local:8081/image_policy\n.\nEnforce implicit deny for images not explicitly allowed.\nTest using\n/root/16/vulnerable-resource.yaml\n.\nFile path to the webhook configuration:\n/etc/kubernetes/imgconfig/\n."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 1",
+    "body": "In Namespace\nteam-dev\n, there is an existing CiliumNetworkPolicy\ndefault-allow\nwhich allows all namespace-internal traffic and cluster DNS.\nThe task is to create two new Layer 3 and Layer 4 CiliumNetworkPolicy named\nteam-dev\nand\nteam-dev-2\nthat:\nEnables\nMutual Authentication\nfor outgoing traffic from Pods with label\nrole=database\nto Pods with label\nrole=api-service\n.\nDenies outgoing\nICMP traffic\nfrom Pods of Deployment\nstuff\nto Pods behind Service\nbackend\n."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 2",
+    "body": "For security hardening, enforce a\nSeccomp profile\non Pods in Namespace\nsecure-app\n.\nCreate a custom Seccomp profile that allows only basic system calls (\nread\n,\nwrite\n,\nexit\n,\nsigreturn\n).\nApply the Seccomp profile to the Deployment\nwebapp\nto restrict system calls for its containers.\nVerify that the Pod is running and that the Seccomp profile is enforced."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 3",
+    "body": "A Pod in namespace\nci-cd\nmounts\n/var/run/docker.sock\nfrom the host.\nBy default, the socket is\nowned by root:docker\nwith permissions\n0660\n, allowing\nany user in group docker\nto control the Docker daemon.\nYour task is to\nreduce the risk by restricting file permissions\nwithout breaking essential CI/CD jobs.\nSpecifically:\nChange ownership and group of\ndocker.sock\ninside the Pod.\nLimit access using chmod so that\nonly the intended user\ncan access the socket.\nVerify that the container cannot run arbitrary containers if not authorized."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 4",
+    "body": "Use\nTrivy\nto scan container images used by Pods in the\nnato\nnamespace for high or critical vulnerabilities.\nDelete any Pods that run images found to be severely vulnerable."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 5",
+    "body": "Create a default-deny NetworkPolicy named\ndefault-deny\nin the\ntesting\nnamespace that blocks all Egress traffic for all Pods.\nOptionally\n, allow DNS egress if needed."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 6",
+    "body": "Create a service account named\nbackend-qa\nin the\nqa\nnamespace that cannot access any secrets.\nUpdate the existing\nfrontend\nPod to use this service account."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 7",
+    "body": "Use\nFalco\nor\nSysdig\nto monitor a single-container Pod named\ntomcat\nfor anomalous process activity.\nDetect processes that spawn or execute unusual commands over a period of at least 40 seconds.\nStore detected incidents on the worker node in\n/home/anomalous/report\nwith the format\n[timestamp],[uid],[processName]\n."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 8",
+    "body": "Enable audit logging in the cluster. Configure log backend with the following requirements:\nLogs are stored at\n/var/log/kubernetes-logs.log\n.\nLogs are retained for 5 days.\nUp to 10 old log files are retained.\nA base policy exists at\n/etc/audit/audit-policy.yaml\n(only specifies what not to log). Extend it to:\nLog Node changes at\nRequestResponse\nlevel.\nLog PersistentVolumeClaim (PVC) changes in the\nfrontend\nnamespace including the\nrequest body\n."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 9",
+    "body": "A development team needs to securely provide configuration data and credentials to their applications inside Kubernetes.\nYou are required to work with Kubernetes Secrets and ensure the data is mounted into a Pod for application usage.\nRetrieve the CA certificate data from the existing secret\ndefault-token-xxxxx\nin the\ndev\nnamespace and save it to a file named\nca.crt\n.\nCreate a new secret\napp-config-secret\nin the\napp\nnamespace with the following key-value pairs:\n-\nAPP_USER=appadmin\n-\nAPP_PASS=Sup3rS3cret\nDeploy a Pod named\napp-pod\nusing the\nnginx\nimage that mounts the secret as a volume at\n/etc/app-config\n."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 10",
+    "body": "Review and correct security and best-practice issues in an existing Dockerfile and Kubernetes Deployment manifest at\n/home/candidate/10\nDo not add or remove any settings; only modify existing ones so that two settings in each file no longer pose security or best-practice concerns.\nIf an unprivileged user is needed for any task, use the user\nnobody\nwith UID\n65535\n.\nDokerfile\nFROM ubuntu:latest\nUSER root                          \nRUN apt-get update && \\\n    apt-get install -y --no-install-recommends \\\n    runit=2.1.2-3ubuntu1 wget=1.17.1-1ubuntu1.5 \\\n    chrpath=0.16-1 tdata=2020a-0ubuntu0.16.04 lsof=4.89.dfsg.0-1 \\\n    lsb-release=9.20160110ubuntu3 sysstat=11.2.0-1ubuntu0.3 \\\n    net-tools=1.60-26ubuntu1 numactl=2.0.11-1ubuntu1.1 bzip2=1.0.6-8.1ubuntu0.2 && \\\n    apt-get autoremove -y && apt-get clean && \\\n    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*\n\nARG COUCH_VERSION=6.5.1\nARG COUCH_BASE_URL=https://packages.couchbase.com/releases/6.5.1\nARG COUCH_FILE=couchbase-server-enterprise_6.5.1-ubuntu16.04_amd64.deb\nARG COUCH_SHA256=91a301f3c5e574f9c5db5ac0f13fac5dc34639f176c41f26047ee6\n\nENV PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install\n\nRUN groupadd -g 1001 cbgroup && useradd -u 1001 -g cbgroup -M cbuser\n\nSHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"]\n\nRUN export INSTALL_SKIP_START=1 && \\\n    wget -q -O ${COUCH_FILE} ${COUCH_BASE_URL}/${COUCH_FILE} && \\\n    echo \"${COUCH_SHA256}  ${COUCH_FILE}\" | sha256sum -c - && \\\n    dpkg -i ${COUCH_FILE} && \\\n    rm -f ${COUCH_FILE}\n\nCOPY scripts/etc/service/couchbase-server/run /etc/service/couchbase-server/run\nCOPY scripts/dummy.sh /usr/local/bin/\nCOPY scripts/entrypoint.sh /\nCOPY scripts/bin/iptables-save /usr/local/bin/iptables-save\nCOPY scripts/bin/ip6tables-save /usr/local/bin/ip6tables-save\nCOPY scripts/bin/vidisplay /usr/local/bin/vidisplay\nCOPY scripts/bin/pvidisplay /usr/local/bin/pvidisplay\n\nRUN chrpath -r \"\\$ORIGIN/../lib\" /opt/couchbase/bin/curl\n\nENTRYPOINT [\"/entrypoint.sh\"]\nUSER root\n\nCMD [\"couchbase-server\"]\n\nEXPOSE 8091-8096 11210 11211 18091-18096\nVOLUME /opt/couchbase/var\nDeployment manifest\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: mysql-db\n  labels:\n    app: mysql-db\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: mysql-db\n  template:\n    metadata:\n      labels:\n        app: mysql-db\n    spec:\n      containers:\n      - name: mysql-container\n        image: mysql:5.1\n        resources:\n          requests:\n            cpu: \"1\"\n            memory: 512Mi\n          limits:\n            cpu: \"2\"\n            memory: 1Gi\n        securityContext:\n          runAsUser: 0                 \n          privileged: false\n          readOnlyRootFilesystem: true\n          capabilities:\n            add: [\"NET_BIND_SERVICE\"]\n            drop: [\"ALL\"]\n        env:\n        - name: MYSQL_PASSWORD\n          value: \"mydbpassword\"\n      volumes:\n        - name: db-storage\n          emptyDir: {}"
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 11",
+    "body": "Organization’s security policy requires:\nServiceAccounts must\nnot\nautomount API credentials.\nServiceAccount names must end with\n-sa\n.\nThe Pod defined in\n/home/candidate/11/pod-manifest.yaml\nfails to schedule due to an incorrect ServiceAccount.\nTasks:\nCreate a new ServiceAccount named\nfrontend-sa\nin namespace\nqa\n, ensuring it does not automount credentials.\nUpdate and apply the Pod manifest to use this ServiceAccount.\nClean up unused ServiceAccounts in\nqa\nnamespace."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 12",
+    "body": "Implement a PodSecurityPolicy that restricts Pod volumes and bind it to a ServiceAccount:\nCreate a PodSecurityPolicy named\nprevent-volume-policy\nthat\nonly allows\npersistentVolumeClaim\nvolumes\n.\nCreate a ServiceAccount\npsp-sa\nin the\nrestricted\nnamespace.\nCreate a ClusterRole\npsp-role\nthat grants access to the PodSecurityPolicy.\nCreate a ClusterRoleBinding\npsp-role-binding\nbinding the ClusterRole to the ServiceAccount.\nVerify the configuration by attempting to create a Pod with a Secret volume; it should fail."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 13",
+    "body": "Generate Software Bill Of Materials (SBOM) documents for specific Kubernetes images and scan an existing SBOM for known vulnerabilities using\nbom\nand\ntrivy\n.\nImages / Files to generate:\nGenerate\nSPDX-JSON SBOM\nfor\nregistry.k8s.io/kube-apiserver:v1.32.0\nand save to\n/opt/candidate/13/sbom1.json\nGenerate\nCycloneDX SBOM\nfor\nregistry.k8s.io/kube-controller-manager:v1.32.0\nand save to\n/opt/candidate/13/sbom2.json\nScan the existing\nSPDX-JSON SBOM\nlocated at\n/opt/candidate/13/sbom_check.json\nfor known vulnerabilities and save the scan result in JSON format to\n/opt/candidate/13/sbom_result.json"
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 14",
+    "body": "Adjust overly broad Role permissions assigned to a Pod's ServiceAccount.\nYou have an existing Pod named\nweb-pod\nin the\ndatabase\nnamespace.\nModify existing Role\nEdit the Role bound to the Pod’s ServiceAccount\ntest-sa\nRestrict it to\nonly allow\nget\nactions\non resources of type\nPods\n.\nCreate a new Role\nName:\ntest-role-2\nNamespace:\ndatabase\nPermissions:\nonly\nupdate\nactions\non resources of type\nStatefulSets\n.\nCreate a RoleBinding\nName:\ntest-role-2-bind\nBind the newly created Role to the same ServiceAccount\ntest-sa\n.\nSummary:\nLimit the existing Role to\nget\non Pods, create a new Role with\nupdate\non\nStatefulSets\n, and bind it to the same ServiceAccount."
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 15",
+    "body": "Validate the integrity of four Kubernetes server binaries located at\n/opt/candidate/15/binaries\non\ncks-node\n.\nCompare their\nsha512 checksums\nagainst the provided verified values and delete any binaries that\ndo not match\n.\nBinaries and Expected Hashes:\nkube-apiserver\n→\na3b9e5c4f7d21e89bc317f0e91a7c845df1100d2fb8cc63dff9e40a9e5a2a3c6bb8aa4e4579de9b136d65b18b7d6eae4c3f26de982e537a0a4a1ef8bb1c27c5f\nkube-controller-manager\n→\nb7a223f9918b94e5d6479fcf41da0cd2d93ce0fd102e5c770d1c9b6c82e1a2ad84cbbd54cdd7a4a98fd6133b0b5e6a981a45b0a9cbf24a93980f89ac56c9f47f\nkube-proxy\n→\n4d9917ea90a3f8ccbe3a607f5c9aeeecb7113a9c02a8e55c5bda6f73dd6b5a7c1b928d0169ea3a8b2c5ddbc0285d54a9d76c9c36f7b8ab7b17d5d8f39d1444a2\nkubelet\n→\n8f1c29d7c8b2f491d512accb04a6d028dcdb3fc6a5b7b890f432e77e3217a90d92c2b4a3d98c8d49e19d3f80ad29348db216d31cbf96f82d19976f3251d9b887"
+  },
+  {
+    "file": "d:/CKS/lab\\3. Certified Kubernetes Security Specialist (CKS) – Practice Test 3.html",
+    "header": "Question 16",
+    "body": "In the namespace\nteam-blue\n, developers deployed a Pod running in\nprivileged mode\n, which violates the\nrestricted\nPod Security Standard\n.\nYou must configure the namespace to enforce the\nrestricted\nprofile so that insecure Pods cannot be recreated.\nThen delete the running Pod from the Deployment and capture the ReplicaSet events showing why the Pod fails to restart.\n- Configure the namespace\nteam-blue\nto enforce the\nrestricted\nPod Security Standard\n(via labels).\n- Delete the Pod from Deployment\nprivileged-runner\nin\nteam-blue\n.\n- Observe ReplicaSet events to confirm that the Pod fails to be recreated due to Pod Security violations.\n- Write the event/log lines showing the failure reason into\n/opt/candidate/16/logs\non\ncks-node\n."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 1",
+    "body": "A Deployment\ndocker-admin\nin namespace\nsandbox\nmounts\n/var/run/docker.sock\nfrom the host.\nThis gives the container\nfull control over the Docker daemon\n, which allows privilege escalation.\nInstead of removing the Pod entirely, your task is to\nreduce the risk by restricting its permissions\nusing Kubernetes security mechanisms.\nSpecifically, you should:\nEnsure the Pod\ndoes not run as root\n.\nDrop all\nLinux capabilities\nexcept those required.\nEnforce\nread-only filesystem\nwhere possible."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 2",
+    "body": "You have an existing Pod named\nnginx-pod\nin the\ntest-system\nnamespace.\nFetch its ServiceAccount name and save it to a file\n/candidate/sa-name.txt\n.\nThen, create a Role in the same namespace that can list, get, and watch Deployments, and bind it to the Pod's ServiceAccount."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 3",
+    "body": "Review a Dockerfile based on\nubuntu:20.04\nand a Kubernetes Deployment manifest.\nFix two prominent security/best-practice issues in each file at\n/home/manifests\nwithout adding or removing other configuration.\nUse an unprivileged user\nnobody\nwith UID 65535 where needed.\nGiven files\nDockerfile\nFROM ubuntu:latest\nRUN apt-get update && \\\n    apt-get install -y --no-install-recommends ca-certificates curl && \\\n    rm -rf /var/lib/apt/lists/*\nWORKDIR /app\nCOPY app /app\nRUN chmod -R a+rX /app\nUSER root\nCMD [\"./start.sh\"]\nDeployment manifest\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  labels:\n    app: kafka\n  name: kafka\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: kafka\n  template:\n    metadata:\n      labels:\n        app: kafka\n    spec:\n      containers:\n      - image: bitnami/kafka\n        name: kafka\n        volumeMounts:\n        - mountPath: /opt/bitnami/kafka/bin\n          name: kafka-vol\n        securityContext:\n          capabilities:\n            add: [\"NET_ADMIN\"]\n            drop: [\"ALL\"]\n          privileged: true               \n          readOnlyRootFilesystem: false    \n          runAsUser: 0                \n        resources: {}\n      volumes:\n      - name: kafka-vol\n        hostPath:\n          path: /"
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 4",
+    "body": "Create a new ServiceAccount\nbackend-sa\nin the\ndefault\nnamespace that can list Pods.\nDeploy a Pod\nbackend-pod\nusing this ServiceAccount and verify it can list all Pods in the\ndefault\nnamespace."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 5",
+    "body": "Create a NetworkPolicy named\nallow-np\nthat:\nAllows Pods in namespace\nstaging\nto connect to port 80 of other Pods in the same namespace.\nDenies traffic to Pods not listening on port 80.\nDenies traffic from Pods outside of\nstaging\nnamespace."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 6",
+    "body": "Prevent privileged pods from being created in the\ndefault\nnamespace using a PodSecurityPolicy (PSP):\nCreate a PSP\nprevent-privileged-policy\nthat forbids privileged pods.\nCreate a ServiceAccount\npsp-sa\nin\ndefault\n.\nCreate a ClusterRole\nprevent-role\nthat allows using the PSP.\nBind the ClusterRole to the ServiceAccount with a ClusterRoleBinding\nprevent-role-binding\n.\nVerify the PSP by attempting to create a privileged pod."
+  },
+  {
+    "file": "d:/CKS/lab\\4. Certified Kubernetes Security Specialist (CKS) – Practice Test 4.html",
+    "header": "Question 7",
+    "body": "Create a default-deny NetworkPolicy in the\ntest\nnamespace to prevent accidental exposure of pods.\nThe policy should block all ingress and egress traffic for every pod in the namespace.\nYou can find a skeleton manifests file at\n/home/policy/network-policy.yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: deny-network"
+  }
+]
