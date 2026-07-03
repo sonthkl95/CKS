@@ -27,6 +27,59 @@ echo "[+] Lab Setup Complete."
 ''',
 
 # ─────────────────────── 2-Cluster-Hardening ───────────────────────
+"2-Cluster-Hardening/Question-02-RBAC-Permissions": r'''
+echo "[+] Creating namespace 'database'..."
+kubectl create ns database --dry-run=client -o yaml | kubectl apply -f -
+echo "[+] Creating ServiceAccount 'test-sa'..."
+kubectl create sa test-sa -n database --dry-run=client -o yaml | kubectl apply -f -
+echo "[+] Creating the existing (overly broad) Role 'test-role' bound to test-sa..."
+kubectl apply -f - <<'EOF'
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: test-role
+  namespace: database
+rules:
+- apiGroups: [""]
+  resources: ["pods", "secrets", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets"]
+  verbs: ["get", "list", "create", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: test-role-bind
+  namespace: database
+subjects:
+- kind: ServiceAccount
+  name: test-sa
+  namespace: database
+roleRef:
+  kind: Role
+  name: test-role
+  apiGroup: rbac.authorization.k8s.io
+EOF
+echo "[+] Creating Pod 'web-pod' that uses test-sa..."
+kubectl apply -f - <<'EOF'
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+  namespace: database
+spec:
+  serviceAccountName: test-sa
+  containers:
+  - name: nginx
+    image: nginx:1.25-alpine
+EOF
+echo ""
+echo "[i] Task: restrict 'test-role' to only 'get' on Pods; create Role 'test-role-2'"
+echo "    (update on StatefulSets) and RoleBinding 'test-role-2-bind' -> test-sa."
+echo "[+] Lab Setup Complete."
+''',
+
 "2-Cluster-Hardening/Question-03-RoleBinding-Secret": r'''
 echo "[+] Creating namespace 'john'..."
 kubectl create ns john --dry-run=client -o yaml | kubectl apply -f -
@@ -656,6 +709,58 @@ echo "[+] Lab Setup Complete."
 ''',
 
 # ─────────────────────── 5-Supply-Chain-Security ───────────────────────
+"5-Supply-Chain-Security/Question-04-ImagePolicy-Webhook": r'''
+echo "[+] Creating the (incomplete) ImagePolicy webhook config in /etc/kubernetes/confcontrol ..."
+mkdir -p /etc/kubernetes/confcontrol
+cat > /etc/kubernetes/confcontrol/admission_configuration.yaml <<'EOF'
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: ImagePolicyWebhook
+  configuration:
+    imagePolicy:
+      kubeConfigFile: /etc/kubernetes/confcontrol/kubeconfig.yaml
+      allowTTL: 50
+      denyTTL: 50
+      retryBackoff: 500
+      defaultAllow: true          # <-- INCOMPLETE: must become false (implicit deny)
+EOF
+cat > /etc/kubernetes/confcontrol/kubeconfig.yaml <<'EOF'
+apiVersion: v1
+kind: Config
+clusters:
+- name: image-bouncer-webhook
+  cluster:
+    server: https://127.0.0.1:8081/image_policy
+    # certificate-authority: /etc/kubernetes/confcontrol/ca.crt
+contexts:
+- name: image-bouncer-webhook
+  context:
+    cluster: image-bouncer-webhook
+    user: api-server
+current-context: image-bouncer-webhook
+users:
+- name: api-server
+  user: {}
+EOF
+echo "[+] Writing a test Pod that uses the 'latest' image tag..."
+mkdir -p /root/16
+cat > /root/16/test-pod.yaml <<'EOF'
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-latest
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+EOF
+echo ""
+echo "[i] Task: enable the ImagePolicy admission plugin on kube-apiserver, set implicit"
+echo "    deny (defaultAllow: false), then try to deploy /root/16/test-pod.yaml (latest tag)."
+echo "[+] Lab Setup Complete."
+''',
+
 "5-Supply-Chain-Security/Question-05-Kubesec-Scan-Manifest": r'''
 echo "[+] Writing the Pod manifest to scan (kubesec-test.yaml)..."
 mkdir -p /root/kubesec 2>/dev/null; cd /root/kubesec 2>/dev/null || cd "$HOME"

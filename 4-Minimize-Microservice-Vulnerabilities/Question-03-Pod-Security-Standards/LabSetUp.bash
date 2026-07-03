@@ -32,7 +32,7 @@ spec:
 EOF
 
 echo "🔹 Creating output directory..."
-mkdir -p /opt/candidate/13
+mkdir -p /opt/candidate/16
 
 echo ""
 echo "✅ Lab setup complete!"
@@ -42,4 +42,4 @@ echo "📋 Your task:"
 echo "   1. Label namespace 'team-blue' to enforce PSA 'restricted'"
 echo "   2. Delete the pod from 'privileged-runner' Deployment"
 echo "   3. Observe events showing pod cannot be recreated"
-echo "   4. Write events to /opt/candidate/13/logs"
+echo "   4. Write events to /opt/candidate/16/logs"
