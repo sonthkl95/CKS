@@ -1,26 +1,37 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 1 - Question 7
-=======================================================
+# Questions.bash  —  CKS Practice Test 2, Question 11
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Fix multiple security violations identified by kube-bench.
-API Server:
-Enable RotateKubeletServerCertificate.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 2  ·  Question 11
+===============================================================
 
-Enable admission plugin PodSecurityPolicy.
+A CIS Benchmark scan revealed multiple violations on the API server, Kubelet, and etcd. Fix all findings by updating configuration files and restarting affected components.
 
-Set --kubelet-certificate-authority argument.
+Violations to fix:
 
-Kubelet:
-Disable anonymous authentication.
+API Server
 
-Set authorization-mode to Webhook.
+`authorization-mode` must not be `AlwaysAllow`.
 
-ETCD:
-Ensure --auto-tls is not true.
+Must include `Node`.
 
-Ensure --peer-auto-tls is not true.
+Must include `RBAC`.
 
-=======================================================
-EOF
+Kubelet
+
+Anonymous authentication must be disabled.
+
+Authorization mode must not be `AlwaysAllow`; should use `Webhook`.
+
+etcd
+
+`--client-cert-auth` must be enabled.
+
+`--auto-tls` must not be enabled.
+
+Use valid TLS certificates (not self-signed).
+
+===============================================================
+CKS_TASK_EOF

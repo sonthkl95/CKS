@@ -1,28 +1,33 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 2 - Question 2
-=======================================================
+# Questions.bash  —  CKS Practice Test 2, Question 2
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
+
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 2  ·  Question 2
+===============================================================
 
 Enable and configure Kubernetes audit logging with specific retention, size, and logging policies:
-Store audit logs at /var/log/kubernetes-logs.log.
+
+Store audit logs at `/var/log/kubernetes-logs.log`.
 
 Retain logs for 12 days and keep a maximum of 8 old log files.
 
 Rotate logs when they reach 200MB.
 
 Extend the audit policy to log:
-Namespace changes at RequestResponse level.
 
-Request body of secret changes in the kube-system namespace.
+Namespace changes at `RequestResponse` level.
 
-All other resources in core and extensions at Request level.
+Request body of secret changes in the `kube-system` namespace.
 
-"pods/portforward" and "services/proxy" at Metadata level.
+All other resources in core and extensions at `Request` level.
 
-Omit the stage RequestReceived.
+`"pods/portforward"` and `"services/proxy"` at `Metadata` level.
 
-Default all other requests at Metadata level.
+Omit the stage `RequestReceived`.
 
-=======================================================
-EOF
+Default all other requests at `Metadata` level.
+
+===============================================================
+CKS_TASK_EOF

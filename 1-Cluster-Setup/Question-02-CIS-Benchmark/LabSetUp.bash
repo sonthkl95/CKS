@@ -2,6 +2,24 @@
 # LabSetUp.bash - Question 2: CIS Benchmark Fixes
 set -e
 
+echo "🔹 Installing kube-bench if not present..."
+if ! command -v kube-bench &> /dev/null; then
+  echo "   Downloading and installing kube-bench..."
+  KUBE_BENCH_VERSION="0.6.17"
+  cd /tmp
+  curl -s -L -O "https://github.com/aquasecurity/kube-bench/releases/download/v${KUBE_BENCH_VERSION}/kube-bench_${KUBE_BENCH_VERSION}_linux_amd64.tar.gz"
+  tar -xzf kube-bench_${KUBE_BENCH_VERSION}_linux_amd64.tar.gz
+  sudo mv kube-bench /usr/local/bin/
+  sudo mkdir -p /etc/kube-bench
+  sudo cp -r cfg /etc/kube-bench/
+  rm -f kube-bench_${KUBE_BENCH_VERSION}_linux_amd64.tar.gz
+  cd - > /dev/null
+  echo "✅ kube-bench installed successfully."
+else
+  echo "✅ kube-bench is already installed."
+fi
+echo ""
+
 echo "🔹 Checking kubelet config location..."
 KUBELET_CONFIG=""
 if [ -f /var/lib/kubelet/config.yaml ]; then

@@ -1,87 +1,117 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 2 - Question 4
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 3, Question 7
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
 
-Falco is a runtime security tool that monitors system calls and detects anomalous container behavior. This task configures Falco to log newly spawned processes into a structured incident file.
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 3  ·  Question 7
+===============================================================
 
-Commands / Steps:
+Falco and Sysdig can monitor container activity in real time.
+Here, a `custom Falco rule` captures newly executed processes inside containers.
+The incident file is stored on the worker node to comply with best practices and avoid moving sensitive data to the master.
 
-```yaml
-# SSH into the worker node
+Commands / Steps
+
+Step 1: Connect to the worker node
+
+```bash
+# Connect to the worker node
 ssh node-01
-# Switch to root
 sudo -i
-# Inspect Falco configuration directory
-ls -l /etc/falco
-# Edit custom Falco rules
+
+# Edit Falco rules to detect container drift
 vim /etc/falco/falco_rules.local.yaml
 ```
 
-```yaml
-# Example Falco rule to detect new executable creation in containers
+Step 2: Add the following rule
+
+```bash
 - rule: Container Drift Detected
-desc: New executable created in a container
-condition: >
-evt.type in (open,openat,creat) and evt.is_open_exec=true and container
-and not runc_writing_exec_fifo
-and not runc_var_lib_docker and not user_known_container_drift_activities
-and evt.rawres>=0
-output:
-%evt.time,%user.uid,%proc.name
-priority: ERROR
-tags: [security]
+  desc: New executable created in a container
+  condition: >
+    evt.type in (open,openat,creat) and evt.is_open_exec=true and container
+    and not runc_writing_exec_fifo and not runc_var_lib_docker
+    and not user_known_container_drift_activities and evt.rawres>=0
+  output:
+    [%evt.time],[%user.uid],[%proc.name]
+  priority: ERROR
+  tags: [security]
 ```
 
-```yaml
-# Edit Falco main configuration for logging output
-vim /etc/falco/falco.yaml
+Step 3:  Check Falco service, PID and logs
+
+```bash
+# Check Falco service and PID
+systemctl cat falco.service
+cat /var/run/falco.pid
+
+# Reload Falco to pick up the new rules
+kill -1 $(cat /var/run/falco.pid)
+
+# Or restart the service
+systemctl restart falco.service
+systemctl status falco.service
+
+# Check Falco logs
+journalctl -f -u falco.service  | grep -oP '<incident format to match>'
 ```
 
-```yaml
-# Example file output configuration
-log_stderr: true
-log_syslog: true
-log_file: /opt/node-01/alerts/details
-# Or on newer versions
-file_output:
-enabled: true
-keep_alive: false
-filename: /opt/node-01/alerts/details
+Step 4: If installed as a binary, run `falco` manually against the local rules
+
+```bash
+# Run falco manually against the local rules
+falco -U -r /etc/falco/falco_rules.local.yaml
+
+# Capture incidents and filter them for the report
+falco -M 500 -r /etc/falco/falco_rules.local.yaml | grep -oP '<incident format to match>'
+
+# Save the filtered output to the report file
+vim /home/anomalous/report
 ```
 
-```yaml
-# Verify Falco configuration
+`Optional`: Check or configure output file location
+
+```bash
 grep -i log /etc/falco/falco.yaml
 grep -i file_output -A 3 /etc/falco/falco.yaml
-# Start or restart Falco service
-systemctl status falco.service
-systemctl start falco.service
-# or if Falco installed as a binary
-falco -U -r /etc/falco/falco_rules.local.yaml
-falco -M 500 -r /etc/falco/falco_rules.local.yaml
-# Exit the node
+
+vim /etc/falco/falco.yaml
+# Example configuration for file output
+file_output:
+  enabled: true
+  keep_alive: false
+  filename: /opt/node-01/alerts/details
+
+# Exit the worker node session
 exit
 ```
 
-Verification Step:
-Monitor the incident file for detected events:
+⚠️ Note:
 
-```yaml
-tail -f /opt/node-01/alerts/details
-```
+Ensure Falco is installed and running on the worker node.
 
-Confirm that each line follows the format: timestamp,uid/username,processName
+Adjust the `falco rule` conditions based on your specific requirements.
 
-Ensure new container processes are detected within ~30 seconds of execution.
+The rule captures newly executed processes inside containers only.
 
-'' Note:
-Falco rules can be customized to include or exclude specific containers or events.
+`evt.rawres>=0` ensures only successful executions are captured
 
-Ensure Falco has sufficient permissions to monitor container processes.
+Output format `[timestamp],[uid],[processName]` must be preserved for the incident report
 
-File-based logging path must exist (/opt/node-01/alerts/) and be writable by Falco.
+The `-M 500` flag in `falco -M 500` sets the maximum number of events to process per second.
 
-=======================================================
-EOF
+This is useful for performance tuning, if your system generates a huge number of system calls, limiting the rate prevents Falco from being overwhelmed.
+
+The `-U` flag in `falco -U` ensures Falco runs in unbuffered mode.
+
+The `-r` flag in `falco -r` tells Falco which `rules file` to use. Here, `/etc/falco/falco_rules.local.yaml` is a `custom rules file`.
+
+Falco evaluates system activity against these rules and triggers alerts when something matches.
+
+Falco logs must remain on the worker node; do not transfer raw logs to master.
+
+Sysdig can also be used to observe process activity but Falco provides more automated detection.
+
+===============================================================
+CKS_SOLUTION_EOF

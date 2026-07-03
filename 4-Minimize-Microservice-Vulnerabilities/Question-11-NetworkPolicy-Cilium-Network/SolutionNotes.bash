@@ -1,18 +1,21 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 3 - Question 1
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 3, Question 1
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
+
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 3  ·  Question 1
+===============================================================
 
 Step 1: Verify Pod labels and IPs
 
-```yaml
+```bash
 kubectl get pod -n team-dev --show-labels -o wide
 ```
 
 Example output:
 
-```yaml
+```bash
 NAME                         ...     IP           ...   LABELS
 database-0                   ...   10.244.2.122    ...   ...,role=database
 api-service-57f557cd65-rhzd7 ...   10.244.1.171    ...   ...,role=api-service
@@ -24,86 +27,90 @@ backend-0                    ...   10.244.3.10     ...   ...,role=backend
 
 Step 2: Create CiliumNetworkPolicy to deny ICMP traffic from stuff to backend
 
-```yaml
+```bash
 # cnp-icmp-deny.yaml
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
-name: team-dev
-namespace: team-dev
+  name: team-dev
+  namespace: team-dev
 spec:
-endpointSelector:
-matchLabels:
-role: stuff  # Pods behind Deployment "stuff"
-egressDeny:
-- toEndpoints:
-- matchLabels:
-role: backend  # Pods behind Service "backend"
-icmps:
-- fields:
-- type: 8
-family: IPv4
-- type: EchoRequest
-family: IPv6
+  endpointSelector:
+    matchLabels:
+      role: stuff  # Pods behind Deployment "stuff"
+  egressDeny:
+  - toEndpoints:
+    - matchLabels:
+        role: backend  # Pods behind Service "backend"
+    icmps:
+    - fields:
+      - type: 8
+        family: IPv4
+      - type: EchoRequest
+        family: IPv6
 ```
 
-```yaml
+```bash
 kubectl apply -f cnp-icmp-deny.yaml
 ```
 
-Step 3: Create CiliumNetworkPolicy to enforce Mutual Authentication from database -> api-service
+Step 3: Create CiliumNetworkPolicy to enforce Mutual Authentication from database → api-service
 
-```yaml
+```bash
 # cnp-mtls.yaml
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
-name: team-dev-2
-namespace: team-dev
+  name: team-dev-2
+  namespace: team-dev
 spec:
-endpointSelector:
-matchLabels:
-role: database
-egress:
-- toEndpoints:
-- matchLabels:
-role: api-service
-authentication:
-mode: "required"  # Enable Mutual Authentication
+  endpointSelector:
+    matchLabels:
+      role: database
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        role: api-service
+    authentication:
+      mode: "required"  # Enable Mutual Authentication
 ```
 
-```yaml
+```bash
 kubectl apply -f cnp-mtls.yaml
 ```
 
 Step 4: Verify policies are applied
 
-```yaml
+```bash
 # Check applied CiliumNetworkPolicies
 kubectl get cnp -n team-dev
+
 # Test ICMP block (stuff -> backend)
 kubectl exec -n team-dev stuff-866696fc57-6ccgr -- ping -c 1 <backend-pod-IP>
 # Should fail due to ICMP deny
+
 # Test outgoing traffic from database to api-service (Mutual Authentication enforced)
 kubectl exec -n team-dev database-0 -- curl http://<api-service-pod-IP>
 # Connection should succeed only if authenticated
 ```
 
 Explanation
-endpointSelector -> selects Pods the policy applies to.
 
-egressDeny -> blocks ICMP traffic from stuff Pods to backend Pods.
+`endpointSelector` → selects Pods the policy applies to.
 
-egress.authentication.mode=required -> enforces Mutual TLS for traffic from database to api-service.
+`egressDeny` → blocks ICMP traffic from `stuff` Pods to `backend` Pods.
 
-By keeping default-allow intact, intra-namespace and DNS traffic remain allowed.
+`egress.authentication.mode=required` → enforces Mutual TLS for traffic from `database` to `api-service`.
 
-'' Notes:
+By keeping `default-allow` intact, intra-namespace and DNS traffic remain allowed.
+
+⚠️ Notes:
+
 ICMP types 8 (IPv4) and EchoRequest (IPv6) are the ones used for ping.
 
 Mutual Authentication ensures encrypted and verified communication between selected Pods.
 
 Policies are additive; multiple CNPs can coexist to enforce different rules for different traffic flows.
 
-=======================================================
-EOF
+===============================================================
+CKS_SOLUTION_EOF

@@ -1,0 +1,285 @@
+{
+  "test1": [
+    {
+      "header": "Question 1",
+      "body": "Enforce a prepared AppArmor profile on a specific worker node and deploy a Pod using it:\n\nApply the `nginx-profile-2` AppArmor profile on the worker node `node-01`.\n\nEdit the Pod manifest to reference this profile.\n\nDeploy the Pod on `node-01` and ensure the profile is applied correctly.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 2",
+      "body": "Create a NetworkPolicy named `deny-all` in the `testing` namespace that blocks all ingress and egress traffic for all pods in the namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 3",
+      "body": "A Pod `nginx-pod` is running in the `default` namespace and uses a token by default.\n\nModify the default `ServiceAccount` to disable automatic token mounting.\n\nCreate a Secret of type `kubernetes.io/service-account-token` that references the default ServiceAccount.\n\nEdit the Pod to:\n\nUse the default ServiceAccount.\n\nMount the token from the Secret at `/var/run/secrets/kubernetes.io/serviceaccount/token`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 4",
+      "body": "The cluster’s API server was temporarily configured to allow unauthenticated + unauthorized access (`anonymous` user had `cluster-admin`).\n\nRe-secure the cluster so that only authenticated and authorized REST requests are allowed.\n\nRequirements:\n\nUse authorization mode `Node,RBAC`.\n\nUse admission controller `NodeRestriction`.\n\nDisable `--anonymous-auth`.\n\nRemove `ClusterRoleBinding` that grants access to `system:anonymous`.\n\nAfter the fix, use the original kubeconfig `/etc/kubernetes/admin.conf` for authenticated kubectl access.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 5",
+      "body": "Enable Kubernetes audit logging with custom retention and policy rules:\n\nStore audit logs at `/var/log/kubernetes-logs.log`.\n\nRetain logs for 5 days, maximum 10 old files, 100 MB per file.\n\nExtend audit policy to:\n\nLog CronJob changes at RequestResponse level.\n\nLog request bodies for deployments in `kube-system` namespace.\n\nLog all other core and extensions resources at Request level.\n\nExclude watch requests by `system:kube-proxy` on endpoints or services.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 6",
+      "body": "You are given a Dockerfile and a Pod manifest. Both contain security best practice violations that need fixing.\n\nRules:\n\nFix two issues in the Dockerfile.\n\nFix two issues in the Pod manifest.\n\nDo not add or remove fields — only edit existing ones.\n\nWhen a non-root user is needed, use `test-user` with UID `5375`.\n\nGiven Files\n\nDockerfile:\n\nFROM ubuntu:latest\nRUN apt-get update -y\nRUN apt-get install nginx -y\nCOPY entrypoint.sh /\nENTRYPOINT [\"/entrypoint.sh\"]\nUSER ROOT\n\nPod manifest:\n\n---\napiVersion: v1\nkind: Pod\nmetadata:\nname: security-context-demo-2\nspec:\nsecurityContext:\nrunAsUser: 1000\ncontainers:\n- name: security-context-demo-2\nimage: gcr.io/google-samples/node-hello:1.0\nsecurityContext:\nrunAsUser: 0\nprivileged: true\nallowPrivilegeEscalation: false\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 7",
+      "body": "Fix multiple security violations identified by `kube-bench`.\n\nAPI Server:\n\nEnable `RotateKubeletServerCertificate`.\n\nEnable admission plugin `PodSecurityPolicy`.\n\nSet `--kubelet-certificate-authority` argument.\n\nKubelet:\n\nDisable anonymous authentication.\n\nSet `authorization-mode` to `Webhook`.\n\nETCD:\n\nEnsure `--auto-tls` is not `true`.\n\nEnsure `--peer-auto-tls` is not `true`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 8",
+      "body": "By default, Kubernetes stores Secrets in etcd in plaintext, which is insecure.\n\nYour task is to enable encryption at rest for Secrets using an `EncryptionConfiguration` manifest with `AES-CBC` and `identity` providers, ensuring that all secrets are encrypted in etcd.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 9",
+      "body": "Ensure that all Pods in the `prod` namespace follow the best practices of being stateless and immutable. Identify and delete any Pods that store data in container volumes (stateful) or are configured as `privileged`/with `writable root filesystems` (not immutable).\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 10",
+      "body": "The cluster uses containerd with `runc` as the default runtime.\n\nIt has been prepared to support an additional runtime handler, `runsc` (gVisor).\n\nCreate a `RuntimeClass` named `sandboxed` using `runsc`, and update all Pods in the `server` namespace to use this runtime.\n\n`/home/candidate/10/runtime-class.yaml`\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 11",
+      "body": "The cluster has a container image scanner webhook but its configuration is incomplete.\n\nCurrent configuration is in `/etc/kubernetes/confcontrol` directory.\n\nEnable the ImagePolicy admission plugin, set it to deny all non-compliant images (implicit deny), and test the configuration by attempting to deploy a Pod using the `latest` image tag.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 12",
+      "body": "A Pod in the namespace `dev-ops` is mounting `/var/run/docker.sock` from the host.\n\nThis gives the container privileged access to the host’s Docker daemon, which is a serious security risk.\n\nIdentify the Pod(s) mounting `docker.sock` and update their Deployment(s) to remove the volume mount.\n\nVerify that the containers can no longer access `/var/run/docker.sock`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 13",
+      "body": "Enable Istio Mutual TLS `(mTLS)` in `STRICT` mode for all workloads in the namespace `payments`.\n\nBefore enforcing `mTLS`, verify that automatic Istio Sidecar Injection is enabled for the namespace.\n\nAfter enforcement, confirm that all Pods communicate using `mTLS`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 14",
+      "body": "The namespace `secure-team` is configured with Pod Security Admission label enforcing `restricted` profile.\n\nYou are given a Deployment manifest `/home/masters/insecure-deployment.yaml` that fails to start because it violates the `restricted` Pod Security Standard.\n\nYour task is to edit the YAML to fix each of these issues and get the Deployment running successfully in `secure-team` namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 15",
+      "body": "One of the worker nodes in the cluster, `worker-1`, is running Kubernetes version v1.32.0, while the control plane has already been upgraded to v1.33.0.\n\nUpgrade `worker-1` to match the control plane version following secure upgrade practices.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 16",
+      "body": "Cluster security monitoring revealed that a malicious container is attempting to access `/dev/mem`, which represents direct access to physical memory.\n\nSuch activity is highly dangerous as it may lead to privilege escalation or kernel bypass.\n\nUse Falco (or sysdig) to detect the malicious Pod and its Deployment, then scale the Deployment replicas to `0` to stop the workload.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.\n\nfunction checkAnswer(e){const c=e.closest('.question-card');if(c.classList.contains('answered')) return;c.classList.add('answered');if(e.getAttribute('data-correct')==='true'){e.classList.add('user-correct');} else {e.classList.add('user-wrong');c.querySelectorAll('.option').forEach(o=>{if(o.getAttribute('data-correct')==='true') o.classList.add('show-correct')});}const x=c.querySelector('.explanation-box');if(x) x.style.display='block';}function resetQuiz() {if(!confirm('Bạn có chắc chắn muốn xóa hết câu trả lời để làm lại?')) return;document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));document.querySelectorAll('.option').forEach(o => {o.classList.remove('user-correct', 'user-wrong', 'show-correct');});document.querySelectorAll('.explanation-box').forEach(x => x.style.display = 'none');window.scrollTo({ top: 0, behavior: 'smooth' });}",
+      "explanation": "No explanation provided."
+    }
+  ],
+  "test2": [
+    {
+      "header": "Question 1",
+      "body": "Enforce a prepared AppArmor profile on a Kubernetes Pod:\n\nApply the `nginx-deny` AppArmor profile on a worker node.\n\nModify the Pod manifest to use this profile.\n\nDeploy the Pod and verify that the profile restricts file write operations.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 2",
+      "body": "Enable and configure Kubernetes audit logging with specific retention, size, and logging policies:\n\nStore audit logs at `/var/log/kubernetes-logs.log`.\n\nRetain logs for 12 days and keep a maximum of 8 old log files.\n\nRotate logs when they reach 200MB.\n\nExtend the audit policy to log:\n\nNamespace changes at `RequestResponse` level.\n\nRequest body of secret changes in the `kube-system` namespace.\n\nAll other resources in core and extensions at `Request` level.\n\n`\"pods/portforward\"` and `\"services/proxy\"` at `Metadata` level.\n\nOmit the stage `RequestReceived`.\n\nDefault all other requests at `Metadata` level.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 3",
+      "body": "Scan two container images for high and critical vulnerabilities using Trivy and save the results:\n\nImages to scan:\n\n`ubuntu:18.04`\n\n`registry.k8s.io/kube-apiserver:v1.24.0`\n\n`registry.k8s.io/kube-scheduler:v1.23.0`\n\n`postgres:12`\n\n`httpd:2.4.49`\n\nOnly consider vulnerabilities with severity `HIGH` or `CRITICAL`.\n\nStore the scan output in `/opt/trivy-vulnerable.txt`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 4",
+      "body": "Monitor container behavior on a worker node using Falco or any similar tool to detect newly spawning and executing processes:\n\nAnalyze containers for at least 30 seconds using process execution filters.\n\nStore detected incidents in `/opt/node-01/alerts/details` in the format: `timestamp,uid/username,processName`.\n\nExample of a properly formatted incident file:\n\n2025-08-10T17:45:17.123Z,root,init\n2025-08-10T17:45:20.124Z,1001,bash\n2025-08-10T17:45:25.125Z,1002,sleep\n2025-08-10T17:45:30.125Z,1010,curl\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 5",
+      "body": "Create a NetworkPolicy named `restricted-policy` to restrict access to the Pod `products-service` in the `dev-team` namespace:\n\nOnly allow ingress traffic from:\n\nPods in the same namespace `dev-team`.\n\nPods with label `environment=testing` in any namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 6",
+      "body": "Use KubeSec to scan a Pod manifest for security issues and apply suggested fixes to achieve a score of at least 4 points:\n\nScan the Pod manifest `kubesec-test.yaml` using the KubeSec Docker image.\n\nApply the recommended security changes.\n\nVerify the manifest passes KubeSec scoring.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 7",
+      "body": "Deploy a Pod using a custom RuntimeClass:\n\nCreate a RuntimeClass named `untrusted` using the prepared runtime handler `runsc` (gVisor).\n\nDeploy a Pod named `untrusted` with image `alpine:3.18` in the `default` namespace.\n\nEnsure the Pod runs on `node-02` using the `untrusted` RuntimeClass.\n\nCapture the output of `dmesg` from the running Pod into `/opt/course/7/untrusted-test-dmesg`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 8",
+      "body": "Create a PodSecurityPolicy that blocks privileged Pods within a specific namespace.\n\nDefine a PodSecurityPolicy named `prevent-psp-policy` that disallows privileged containers.\n\nSet up a ClusterRole `restrict-access-role` that grants access to this policy.\n\nAdd a ServiceAccount `psp-restrict-sa` inside the `staging` namespace.\n\nBind the ClusterRole to the ServiceAccount using a ClusterRoleBinding `restrict-access-bind`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 9",
+      "body": "Create a new Kubernetes user, approve its certificate, and assign namespace-specific permissions:\n\nCreate a user `john` and generate a Certificate Signing Request (CSR).\n\nApprove the CSR and retrieve the signed certificate.\n\nCreate a Role `john-role` in namespace `john` to allow `list`, `get`, `create`, and `delete` on `pods` and `secrets`.\n\nCreate a RoleBinding `john-role-binding` to attach the Role to user `john`.\n\nVerify permissions using `kubectl auth can-i`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 10",
+      "body": "Deploy an Nginx Pod with TLS-enabled ingress in the `testing` namespace:\n\nCreate a TLS Secret from `bingo.crt` and `bingo.key`.\n\nDeploy a Pod named `nginx-pod` in the `testing` namespace.\n\nExpose the Pod with a Service.\n\nCreate an Ingress using TLS (`bingo-tls`) with host `bingo.com`.\n\nRedirect all HTTP traffic to HTTPS.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 11",
+      "body": "A CIS Benchmark scan revealed multiple violations on the API server, Kubelet, and etcd. Fix all findings by updating configuration files and restarting affected components.\n\nViolations to fix:\n\nAPI Server\n\n`authorization-mode` must not be `AlwaysAllow`.\n\nMust include `Node`.\n\nMust include `RBAC`.\n\nKubelet\n\nAnonymous authentication must be disabled.\n\nAuthorization mode must not be `AlwaysAllow`; should use `Webhook`.\n\netcd\n\n`--client-cert-auth` must be enabled.\n\n`--auto-tls` must not be enabled.\n\nUse valid TLS certificates (not self-signed).\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 12",
+      "body": "Retrieve the contents of the existing secret `admin` in the `safe` namespace.\n\nStore the fields into local files:\n\n`username` → `/home/cert-masters/username.txt`\n\n`password` → `/home/cert-masters/password.txt`\n\nCreate a new secret `newsecret` in the `safe` namespace with credentials:\n\nusername: `dbadmin`\n\npassword: `moresecurepas`\n\nCreate a new pod that mounts this new secret.\n\nConstraints:\n\nBoth files must be created (they do not exist initially).\n\nDo not reuse these files for later steps — create new resources independently.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 13",
+      "body": "Identify a service running on port 389, list all its open files, and remove the binary:\n\nFind the process ID (PID) of the service listening on port 389.\n\nStore the list of all open files of the process in `/candidate/13/files.txt`.\n\nLocate the executable binary of the process and delete it.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 14",
+      "body": "Modify the existing `Role` bound to ServiceAccount `sa-dev-1` (used by Pod `web-pod` in namespace `security`) to allow only `watch` on `services`.\n\nCreate a new `ClusterRole role-2` to allow only `update` on `namespaces`.\n\nBind it via a `ClusterRoleBinding` named `role-2-binding` to the ServiceAccount `sa-dev-1`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 15",
+      "body": "A Pod `token-demo` is running in the `default` namespace and uses the default mounted token.\n\nModify the default `ServiceAccount` to disable automatic token mounting (`automountServiceAccountToken: false`).\n\nEdit the Pod to:\n\nUse this ServiceAccount.\n\nMount a projected volume with the ServiceAccount token manually at `/var/run/secrets/tokens/token.jwt`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 16",
+      "body": "Integrate the cluster’s container image scanner to reject vulnerable images.\n\nConfigure the ImagePolicyWebhook admission plugin with HTTPS endpoint `https://valhalla.local:8081/image_policy`.\n\nEnforce implicit deny for images not explicitly allowed.\n\nTest using `/root/16/vulnerable-resource.yaml`.\n\nFile path to the webhook configuration: `/etc/kubernetes/imgconfig/`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.\n\nfunction checkAnswer(e){const c=e.closest('.question-card');if(c.classList.contains('answered')) return;c.classList.add('answered');if(e.getAttribute('data-correct')==='true'){e.classList.add('user-correct');} else {e.classList.add('user-wrong');c.querySelectorAll('.option').forEach(o=>{if(o.getAttribute('data-correct')==='true') o.classList.add('show-correct')});}const x=c.querySelector('.explanation-box');if(x) x.style.display='block';}function resetQuiz() {if(!confirm('Bạn có chắc chắn muốn xóa hết câu trả lời để làm lại?')) return;document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));document.querySelectorAll('.option').forEach(o => {o.classList.remove('user-correct', 'user-wrong', 'show-correct');});document.querySelectorAll('.explanation-box').forEach(x => x.style.display = 'none');window.scrollTo({ top: 0, behavior: 'smooth' });}",
+      "explanation": "No explanation provided."
+    }
+  ],
+  "test3": [
+    {
+      "header": "Question 1",
+      "body": "In Namespace `team-dev`, there is an existing CiliumNetworkPolicy `default-allow` which allows all namespace-internal traffic and cluster DNS.\nThe task is to create two new Layer 3 and Layer 4 CiliumNetworkPolicy named `team-dev` and `team-dev-2` that:\n\nEnables `Mutual Authentication` for outgoing traffic from Pods with label `role=database` to Pods with label `role=api-service`.\n\nDenies outgoing ICMP traffic from Pods of Deployment `stuff` to Pods behind Service `backend`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 2",
+      "body": "For security hardening, enforce a Seccomp profile on Pods in Namespace `secure-app`.\n\nCreate a custom Seccomp profile that allows only basic system calls (`read`, `write`, `exit`, `sigreturn`).\n\nApply the Seccomp profile to the Deployment `webapp` to restrict system calls for its containers.\n\nVerify that the Pod is running and that the Seccomp profile is enforced.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 3",
+      "body": "A Pod in namespace `ci-cd` mounts `/var/run/docker.sock` from the host.\nBy default, the socket is owned by root:docker with permissions `0660`, allowing any user in group docker to control the Docker daemon.\n\nYour task is to reduce the risk by restricting file permissions without breaking essential CI/CD jobs.\nSpecifically:\n\nChange ownership and group of `docker.sock` inside the Pod.\n\nLimit access using chmod so that only the intended user can access the socket.\n\nVerify that the container cannot run arbitrary containers if not authorized.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 4",
+      "body": "Use `Trivy` to scan container images used by Pods in the `nato` namespace for high or critical vulnerabilities.\n\nDelete any Pods that run images found to be severely vulnerable.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 5",
+      "body": "Create a default-deny NetworkPolicy named `default-deny` in the `testing` namespace that blocks all Egress traffic for all Pods.\n`Optionally`, allow DNS egress if needed.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 6",
+      "body": "Create a service account named `backend-qa` in the `qa` namespace that cannot access any secrets.\n\nUpdate the existing `frontend` Pod to use this service account.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 7",
+      "body": "Use Falco or Sysdig to monitor a single-container Pod named `tomcat` for anomalous process activity.\n\nDetect processes that spawn or execute unusual commands over a period of at least 40 seconds.\n\nStore detected incidents on the worker node in `/home/anomalous/report` with the format `[timestamp],[uid],[processName]`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 8",
+      "body": "Enable audit logging in the cluster. Configure log backend with the following requirements:\n\nLogs are stored at `/var/log/kubernetes-logs.log`.\n\nLogs are retained for 5 days.\n\nUp to 10 old log files are retained.\n\nA base policy exists at `/etc/audit/audit-policy.yaml` (only specifies what not to log). Extend it to:\n\nLog Node changes at `RequestResponse` level.\n\nLog PersistentVolumeClaim (PVC) changes in the `frontend` namespace including the `request body`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 9",
+      "body": "A development team needs to securely provide configuration data and credentials to their applications inside Kubernetes.\n\nYou are required to work with Kubernetes Secrets and ensure the data is mounted into a Pod for application usage.\n\nRetrieve the CA certificate data from the existing secret `default-token-xxxxx` in the `dev` namespace and save it to a file named `ca.crt`.\n\nCreate a new secret `app-config-secret` in the `app` namespace with the following key-value pairs:\n\n- `APP_USER=appadmin `\n\n- `APP_PASS=Sup3rS3cret`\n\nDeploy a Pod named `app-pod` using the `nginx` image that mounts the secret as a volume at `/etc/app-config`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 10",
+      "body": "Review and correct security and best-practice issues in an existing Dockerfile and Kubernetes Deployment manifest at `/home/candidate/10`\n\nDo not add or remove any settings; only modify existing ones so that two settings in each file no longer pose security or best-practice concerns.\n\nIf an unprivileged user is needed for any task, use the user `nobody` with UID `65535`.\n\n`Dokerfile`\n\nFROM ubuntu:latest\nUSER root\nRUN apt-get update && \\\napt-get install -y --no-install-recommends \\\nrunit=2.1.2-3ubuntu1 wget=1.17.1-1ubuntu1.5 \\\nchrpath=0.16-1 tdata=2020a-0ubuntu0.16.04 lsof=4.89.dfsg.0-1 \\\nlsb-release=9.20160110ubuntu3 sysstat=11.2.0-1ubuntu0.3 \\\nnet-tools=1.60-26ubuntu1 numactl=2.0.11-1ubuntu1.1 bzip2=1.0.6-8.1ubuntu0.2 && \\\napt-get autoremove -y && apt-get clean && \\\nrm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*\n\nARG COUCH_VERSION=6.5.1\nARG COUCH_BASE_URL=https://packages.couchbase.com/releases/6.5.1\nARG COUCH_FILE=couchbase-server-enterprise_6.5.1-ubuntu16.04_amd64.deb\nARG COUCH_SHA256=91a301f3c5e574f9c5db5ac0f13fac5dc34639f176c41f26047ee6\n\nENV PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install\n\nRUN groupadd -g 1001 cbgroup && useradd -u 1001 -g cbgroup -M cbuser\n\nSHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"]\n\nRUN export INSTALL_SKIP_START=1 && \\\nwget -q -O ${COUCH_FILE} ${COUCH_BASE_URL}/${COUCH_FILE} && \\\necho \"${COUCH_SHA256} ${COUCH_FILE}\" | sha256sum -c - && \\\ndpkg -i ${COUCH_FILE} && \\\nrm -f ${COUCH_FILE}\n\nCOPY scripts/etc/service/couchbase-server/run /etc/service/couchbase-server/run\nCOPY scripts/dummy.sh /usr/local/bin/\nCOPY scripts/entrypoint.sh /\nCOPY scripts/bin/iptables-save /usr/local/bin/iptables-save\nCOPY scripts/bin/ip6tables-save /usr/local/bin/ip6tables-save\nCOPY scripts/bin/vidisplay /usr/local/bin/vidisplay\nCOPY scripts/bin/pvidisplay /usr/local/bin/pvidisplay\n\nRUN chrpath -r \"\\$ORIGIN/../lib\" /opt/couchbase/bin/curl\n\nENTRYPOINT [\"/entrypoint.sh\"]\nUSER root\n\nCMD [\"couchbase-server\"]\n\nEXPOSE 8091-8096 11210 11211 18091-18096\nVOLUME /opt/couchbase/var\n\n`Deployment manifest`\n\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\nname: mysql-db\nlabels:\napp: mysql-db\nspec:\nreplicas: 1\nselector:\nmatchLabels:\napp: mysql-db\ntemplate:\nmetadata:\nlabels:\napp: mysql-db\nspec:\ncontainers:\n- name: mysql-container\nimage: mysql:5.1\nresources:\nrequests:\ncpu: \"1\"\nmemory: 512Mi\nlimits:\ncpu: \"2\"\nmemory: 1Gi\nsecurityContext:\nrunAsUser: 0\nprivileged: false\nreadOnlyRootFilesystem: true\ncapabilities:\nadd: [\"NET_BIND_SERVICE\"]\ndrop: [\"ALL\"]\nenv:\n- name: MYSQL_PASSWORD\nvalue: \"mydbpassword\"\nvolumes:\n- name: db-storage\nemptyDir: {}\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 11",
+      "body": "Organization’s security policy requires:\n\nServiceAccounts must not automount API credentials.\n\nServiceAccount names must end with `-sa`.\n\nThe Pod defined in `/home/candidate/11/pod-manifest.yaml` fails to schedule due to an incorrect ServiceAccount.\n\nTasks:\n\nCreate a new ServiceAccount named `frontend-sa` in namespace `qa`, ensuring it does not automount credentials.\n\nUpdate and apply the Pod manifest to use this ServiceAccount.\n\nClean up unused ServiceAccounts in `qa` namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 12",
+      "body": "Implement a PodSecurityPolicy that restricts Pod volumes and bind it to a ServiceAccount:\n\nCreate a PodSecurityPolicy named `prevent-volume-policy` that only allows `persistentVolumeClaim` volumes.\n\nCreate a ServiceAccount `psp-sa` in the `restricted` namespace.\n\nCreate a ClusterRole `psp-role` that grants access to the PodSecurityPolicy.\n\nCreate a ClusterRoleBinding `psp-role-binding` binding the ClusterRole to the ServiceAccount.\n\nVerify the configuration by attempting to create a Pod with a Secret volume; it should fail.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 13",
+      "body": "Generate Software Bill Of Materials (SBOM) documents for specific Kubernetes images and scan an existing SBOM for known vulnerabilities using `bom` and `trivy`.\n\nImages / Files to generate:\n\nGenerate SPDX-JSON SBOM for `registry.k8s.io/kube-apiserver:v1.32.0` and save to `/opt/candidate/13/sbom1.json`\n\nGenerate CycloneDX SBOM for `registry.k8s.io/kube-controller-manager:v1.32.0` and save to `/opt/candidate/13/sbom2.json`\n\nScan the existing SPDX-JSON SBOM located at `/opt/candidate/13/sbom_check.json` for known vulnerabilities and save the scan result in JSON format to `/opt/candidate/13/sbom_result.json`\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 14",
+      "body": "Adjust overly broad Role permissions assigned to a Pod's ServiceAccount.\n\nYou have an existing Pod named `web-pod` in the `database` namespace.\n\nModify existing Role\n\nEdit the Role bound to the Pod’s ServiceAccount `test-sa`\n\nRestrict it to only allow `get` actions on resources of type `Pods`.\n\nCreate a new Role\n\nName: `test-role-2`\n\nNamespace: `database`\n\nPermissions: only `update` actions on resources of type `StatefulSets`.\n\nCreate a RoleBinding\n\nName: `test-role-2-bind`\n\nBind the newly created Role to the same ServiceAccount `test-sa`.\n\nSummary:\nLimit the existing Role to `get` on Pods, create a new Role with `update` on StatefulSets, and bind it to the same ServiceAccount.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 15",
+      "body": "Validate the integrity of four Kubernetes server binaries located at `/opt/candidate/15/binaries` on `cks-node`.\nCompare their sha512 checksums against the provided verified values and delete any binaries that do not match.\n\nBinaries and Expected Hashes:\n\nkube-apiserver → `a3b9e5c4f7d21e89bc317f0e91a7c845df1100d2fb8cc63dff9e40a9e5a2a3c6bb8aa4e4579de9b136d65b18b7d6eae4c3f26de982e537a0a4a1ef8bb1c27c5f`\n\nkube-controller-manager → `b7a223f9918b94e5d6479fcf41da0cd2d93ce0fd102e5c770d1c9b6c82e1a2ad84cbbd54cdd7a4a98fd6133b0b5e6a981a45b0a9cbf24a93980f89ac56c9f47f`\n\nkube-proxy → `4d9917ea90a3f8ccbe3a607f5c9aeeecb7113a9c02a8e55c5bda6f73dd6b5a7c1b928d0169ea3a8b2c5ddbc0285d54a9d76c9c36f7b8ab7b17d5d8f39d1444a2`\n\nkubelet → `8f1c29d7c8b2f491d512accb04a6d028dcdb3fc6a5b7b890f432e77e3217a90d92c2b4a3d98c8d49e19d3f80ad29348db216d31cbf96f82d19976f3251d9b887`\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 16",
+      "body": "In the namespace `team-blue`, developers deployed a Pod running in privileged mode, which violates the `restricted` Pod Security Standard.\n\nYou must configure the namespace to enforce the `restricted` profile so that insecure Pods cannot be recreated.\n\nThen delete the running Pod from the Deployment and capture the ReplicaSet events showing why the Pod fails to restart.\n\n- Configure the namespace `team-blue` to enforce the `restricted` Pod Security Standard (via labels).\n\n- Delete the Pod from Deployment privileged-runner in `team-blue`.\n\n- Observe ReplicaSet events to confirm that the Pod fails to be recreated due to Pod Security violations.\n\n- Write the event/log lines showing the failure reason into `/opt/candidate/16/logs` on `cks-node`.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.\n\nfunction checkAnswer(e){const c=e.closest('.question-card');if(c.classList.contains('answered')) return;c.classList.add('answered');if(e.getAttribute('data-correct')==='true'){e.classList.add('user-correct');} else {e.classList.add('user-wrong');c.querySelectorAll('.option').forEach(o=>{if(o.getAttribute('data-correct')==='true') o.classList.add('show-correct')});}const x=c.querySelector('.explanation-box');if(x) x.style.display='block';}function resetQuiz() {if(!confirm('Bạn có chắc chắn muốn xóa hết câu trả lời để làm lại?')) return;document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));document.querySelectorAll('.option').forEach(o => {o.classList.remove('user-correct', 'user-wrong', 'show-correct');});document.querySelectorAll('.explanation-box').forEach(x => x.style.display = 'none');window.scrollTo({ top: 0, behavior: 'smooth' });}",
+      "explanation": "No explanation provided."
+    }
+  ],
+  "test4": [
+    {
+      "header": "Question 1",
+      "body": "A Deployment `docker-admin` in namespace `sandbox` mounts `/var/run/docker.sock` from the host.\nThis gives the container full control over the Docker daemon, which allows privilege escalation.\n\nInstead of removing the Pod entirely, your task is to reduce the risk by restricting its permissions using Kubernetes security mechanisms.\nSpecifically, you should:\n\nEnsure the Pod does not run as root.\n\nDrop all Linux capabilities except those required.\n\nEnforce read-only filesystem where possible.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 2",
+      "body": "You have an existing Pod named `nginx-pod` in the `test-system` namespace.\n\nFetch its ServiceAccount name and save it to a file `/candidate/sa-name.txt`.\n\nThen, create a Role in the same namespace that can list, get, and watch Deployments, and bind it to the Pod's ServiceAccount.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 3",
+      "body": "Review a Dockerfile based on `ubuntu:20.04` and a Kubernetes Deployment manifest.\n\nFix two prominent security/best-practice issues in each file at `/home/manifests` without adding or removing other configuration.\n\nUse an unprivileged user `nobody` with UID 65535 where needed.\n\nGiven files\n\n`Dockerfile`\n\nFROM ubuntu:latest\nRUN apt-get update && \\\napt-get install -y --no-install-recommends ca-certificates curl && \\\nrm -rf /var/lib/apt/lists/*\nWORKDIR /app\nCOPY app /app\nRUN chmod -R a+rX /app\nUSER root\nCMD [\"./start.sh\"]\n\n`Deployment manifest`\n\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\nlabels:\napp: kafka\nname: kafka\nspec:\nreplicas: 1\nselector:\nmatchLabels:\napp: kafka\ntemplate:\nmetadata:\nlabels:\napp: kafka\nspec:\ncontainers:\n- image: bitnami/kafka\nname: kafka\nvolumeMounts:\n- mountPath: /opt/bitnami/kafka/bin\nname: kafka-vol\nsecurityContext:\ncapabilities:\nadd: [\"NET_ADMIN\"]\ndrop: [\"ALL\"]\nprivileged: true\nreadOnlyRootFilesystem: false\nrunAsUser: 0\nresources: {}\nvolumes:\n- name: kafka-vol\nhostPath:\npath: /\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 4",
+      "body": "Create a new ServiceAccount `backend-sa` in the `default` namespace that can list Pods.\n\nDeploy a Pod `backend-pod` using this ServiceAccount and verify it can list all Pods in the `default` namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 5",
+      "body": "Create a NetworkPolicy named `allow-np` that:\n\nAllows Pods in namespace `staging` to connect to port 80 of other Pods in the same namespace.\n\nDenies traffic to Pods not listening on port 80.\n\nDenies traffic from Pods outside of `staging` namespace.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 6",
+      "body": "Prevent privileged pods from being created in the `default` namespace using a PodSecurityPolicy (PSP):\n\nCreate a PSP `prevent-privileged-policy` that forbids privileged pods.\n\nCreate a ServiceAccount `psp-sa` in `default`.\n\nCreate a ClusterRole `prevent-role` that allows using the PSP.\n\nBind the ClusterRole to the ServiceAccount with a ClusterRoleBinding `prevent-role-binding`.\n\nVerify the PSP by attempting to create a privileged pod.\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.",
+      "explanation": "No explanation provided."
+    },
+    {
+      "header": "Question 7",
+      "body": "Create a default-deny NetworkPolicy in the `test` namespace to prevent accidental exposure of pods.\n\nThe policy should block all ingress and egress traffic for every pod in the namespace.\n\nYou can find a skeleton manifests file at `/home/policy/network-policy.yaml`\n\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\nname: deny-network\n\n⚪\n\nsolution\n\n⚪\n\nN/A\n\n💡 Explanation:\nNo explanation provided.\n\nfunction checkAnswer(e){const c=e.closest('.question-card');if(c.classList.contains('answered')) return;c.classList.add('answered');if(e.getAttribute('data-correct')==='true'){e.classList.add('user-correct');} else {e.classList.add('user-wrong');c.querySelectorAll('.option').forEach(o=>{if(o.getAttribute('data-correct')==='true') o.classList.add('show-correct')});}const x=c.querySelector('.explanation-box');if(x) x.style.display='block';}function resetQuiz() {if(!confirm('Bạn có chắc chắn muốn xóa hết câu trả lời để làm lại?')) return;document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));document.querySelectorAll('.option').forEach(o => {o.classList.remove('user-correct', 'user-wrong', 'show-correct');});document.querySelectorAll('.explanation-box').forEach(x => x.style.display = 'none');window.scrollTo({ top: 0, behavior: 'smooth' });}",
+      "explanation": "No explanation provided."
+    }
+  ]
+}

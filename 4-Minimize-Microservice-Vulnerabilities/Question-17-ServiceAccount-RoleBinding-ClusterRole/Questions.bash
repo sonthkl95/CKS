@@ -1,19 +1,23 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 4 - Question 6
-=======================================================
+# Questions.bash  —  CKS Practice Test 4, Question 6
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Prevent privileged pods from being created in the default namespace using a PodSecurityPolicy (PSP):
-Create a PSP prevent-privileged-policy that forbids privileged pods.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 4  ·  Question 6
+===============================================================
 
-Create a ServiceAccount psp-sa in default.
+Prevent privileged pods from being created in the `default` namespace using a PodSecurityPolicy (PSP):
 
-Create a ClusterRole prevent-role that allows using the PSP.
+Create a PSP `prevent-privileged-policy` that forbids privileged pods.
 
-Bind the ClusterRole to the ServiceAccount with a ClusterRoleBinding prevent-role-binding.
+Create a ServiceAccount `psp-sa` in `default`.
+
+Create a ClusterRole `prevent-role` that allows using the PSP.
+
+Bind the ClusterRole to the ServiceAccount with a ClusterRoleBinding `prevent-role-binding`.
 
 Verify the PSP by attempting to create a privileged pod.
 
-=======================================================
-EOF
+===============================================================
+CKS_TASK_EOF

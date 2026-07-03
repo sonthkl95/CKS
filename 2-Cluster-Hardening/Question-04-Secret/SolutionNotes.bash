@@ -1,87 +1,97 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 2 - Question 10
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 2, Question 10
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
+
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 2  ·  Question 10
+===============================================================
 
 TLS Secrets allow Kubernetes Ingress to terminate SSL/TLS traffic. Annotations on the Ingress ensure HTTP traffic is redirected to HTTPS. The Pod is exposed via a Service to be reachable through the Ingress.
 
 Commands / Steps:
 
-```yaml
+```bash
 # Switch to root
 sudo -i
+
 # Create namespace
 kubectl create namespace testing
+
 # Create TLS secret
 kubectl create secret tls bingo-tls --cert=bingo.crt --key=bingo.key -n testing
+
 # Deploy Nginx Pod and expose port 80
 kubectl run nginx-pod -n testing --image=nginx --expose=true --port=80
+
 # Deploy NGINX Ingress Controller (example using cloud provider)
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
-```yaml
+```bash
 # Generate ingress manifest with TLS and HTTP to HTTPS redirection
 kubectl create ingress bingo-com \
---rule=bingo.com/=nginx-pod:80,tls=bingo-tls -n testing \
---annotation nginx.ingress.kubernetes.io/ssl-redirect="true" \
---annotation nginx.ingress.kubernetes.io/force-ssl-redirect="true" \
---dry-run=client -o yaml > bingo-ingress.yaml
+  --rule=bingo.com/=nginx-pod:80,tls=bingo-tls -n testing \
+  --annotation nginx.ingress.kubernetes.io/ssl-redirect="true" \
+  --annotation nginx.ingress.kubernetes.io/force-ssl-redirect="true" \
+  --dry-run=client -o yaml > bingo-ingress.yaml
+
 # Edit ingress if necessary
 vim bingo-ingress.yaml
 ```
 
-```yaml
+```bash
 # bingo-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-name: bingo-com
-namespace: testing
-annotations:
-nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: bingo-com
+  namespace: testing
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-rules:
-- host: bingo.com
-http:
-paths:
-- path: /
-pathType: Prefix
-backend:
-service:
-name: nginx-pod
-port:
-number: 80
-tls:
-- hosts:
-- bingo.com
-secretName: bingo-tls
+  rules:
+  - host: bingo.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-pod
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - bingo.com
+    secretName: bingo-tls
 ```
 
-```yaml
+```bash
 # Apply the ingress
 kubectl apply -f bingo-ingress.yaml
+
 # Verify the service of the ingress controller
 kubectl get svc -n ingress-nginx
 ```
 
 Verification Step:
+
 Confirm the Ingress is created and listening on TLS:
 
-```yaml
+```bash
 kubectl get ingress -n testing
 kubectl describe ingress bingo-com -n testing
 ```
 
 Test redirection from HTTP to HTTPS:
 
-```yaml
+```bash
 curl -I http://bingo.com
 ```
 
-Verify TLS termination using the created Secret and that traffic reaches the nginx-pod.
+Verify TLS termination using the created Secret and that traffic reaches the `nginx-pod`.
 
-=======================================================
-EOF
+===============================================================
+CKS_SOLUTION_EOF

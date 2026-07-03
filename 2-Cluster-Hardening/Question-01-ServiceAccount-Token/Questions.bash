@@ -1,19 +1,23 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 1 - Question 3
-=======================================================
+# Questions.bash  —  CKS Practice Test 1, Question 3
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-A Pod nginx-pod is running in the default namespace and uses a token by default.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 1  ·  Question 3
+===============================================================
 
-Modify the default ServiceAccount to disable automatic token mounting.
+A Pod `nginx-pod` is running in the `default` namespace and uses a token by default.
 
-Create a Secret of type kubernetes.io/service-account-token that references the default ServiceAccount.
+Modify the default `ServiceAccount` to disable automatic token mounting.
+
+Create a Secret of type `kubernetes.io/service-account-token` that references the default ServiceAccount.
 
 Edit the Pod to:
+
 Use the default ServiceAccount.
 
-Mount the token from the Secret at /var/run/secrets/kubernetes.io/serviceaccount/token.
+Mount the token from the Secret at `/var/run/secrets/kubernetes.io/serviceaccount/token`.
 
-=======================================================
-EOF
+===============================================================
+CKS_TASK_EOF

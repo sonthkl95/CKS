@@ -1,23 +1,27 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 1 - Question 4
-=======================================================
+# Questions.bash  —  CKS Practice Test 1, Question 4
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-The cluster's API server was temporarily configured to allow unauthenticated + unauthorized access (anonymous user had cluster-admin).
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 1  ·  Question 4
+===============================================================
+
+The cluster’s API server was temporarily configured to allow unauthenticated + unauthorized access (`anonymous` user had `cluster-admin`).
 
 Re-secure the cluster so that only authenticated and authorized REST requests are allowed.
 
 Requirements:
-Use authorization mode Node,RBAC.
 
-Use admission controller NodeRestriction.
+Use authorization mode `Node,RBAC`.
 
-Disable --anonymous-auth.
+Use admission controller `NodeRestriction`.
 
-Remove ClusterRoleBinding that grants access to system:anonymous.
+Disable `--anonymous-auth`.
 
-After the fix, use the original kubeconfig /etc/kubernetes/admin.conf for authenticated kubectl access.
+Remove `ClusterRoleBinding` that grants access to `system:anonymous`.
 
-=======================================================
-EOF
+After the fix, use the original kubeconfig `/etc/kubernetes/admin.conf` for authenticated kubectl access.
+
+===============================================================
+CKS_TASK_EOF

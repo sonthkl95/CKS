@@ -1,111 +1,98 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 1 - Question 16
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 2, Question 4
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
 
-Commands / Steps
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 2  ·  Question 4
+===============================================================
 
-Create a custom Falco rule file rule.yaml:
+Falco is a runtime security tool that monitors system calls and detects anomalous container behavior. This task configures Falco to log newly spawned processes into a structured incident file.
 
-```yaml
-- rule: read write below /dev/mem
-desc: An attempt to read or write to /dev/mem directory
-condition: >
-((evt.is_open_read=true or evt.is_open_write=true) and fd.name contains /dev/mem)
-output: "Process %proc.name accessed /dev/mem (command=%proc.cmdline user=%user.name container=%container.id image=%container.image.repository pod_name=%k8s.pod.name namespace=%k8s.ns.name)"
-priority: WARNING
-tags: [security]
+Commands / Steps:
+
+```bash
+# SSH into the worker node
+ssh node-01
+
+# Switch to root
+sudo -i
+
+# Inspect Falco configuration directory
+ls -l /etc/falco
+
+# Edit custom Falco rules
+vim /etc/falco/falco_rules.local.yaml
 ```
 
-Run Falco manually with the custom rule file:
-
-```yaml
-falco -r rule.yaml  | grep -i 'dev/mem'
+```bash
+# Example Falco rule to detect new executable creation in containers
+- rule: Container Drift Detected
+  desc: New executable created in a container
+  condition: >
+    evt.type in (open,openat,creat) and evt.is_open_exec=true and container
+    and not runc_writing_exec_fifo
+    and not runc_var_lib_docker and not user_known_container_drift_activities
+    and evt.rawres>=0
+  output:
+    %evt.time,%user.uid,%proc.name
+  priority: ERROR
+  tags: [security]
 ```
 
-Check Falco output/logs for alerts:
-
-```yaml
-# Example alert:
-23:15:42.567890: Warning Process evil-binary accessed /dev/mem (command=evil-binary user=root container=abc123 image=malicious/image pod_name=mem-hacker-7d89d9c7f8-xyz namespace=default)
+```bash
+# Edit Falco main configuration for logging output
+vim /etc/falco/falco.yaml
 ```
 
-```yaml
-' Pod: mem-hacker-7d89d9c7f8-xyz
-' Namespace: default
-' Deployment: mem-hacker
+```bash
+# Example file output configuration
+log_stderr: true
+log_syslog: true
+log_file: /opt/node-01/alerts/details
+
+# Or on newer versions
+file_output:
+  enabled: true
+  keep_alive: false
+  filename: /opt/node-01/alerts/details
 ```
 
-Identify the Deployment that owns the container if only container ID is available, map it back to Pod/Deployment:
+```bash
+# Verify Falco configuration
+grep -i log /etc/falco/falco.yaml
+grep -i file_output -A 3 /etc/falco/falco.yaml
 
-```yaml
-# Using crictl to find the container
-crictl ps -id abc123
-crictl pods -id <pod_id>
-kubectl get pod -A | grep mem-hacker
+# Start or restart Falco service
+systemctl status falco.service
+systemctl start falco.service
+# or if Falco installed as a binary
+falco -U -r /etc/falco/falco_rules.local.yaml
+falco -M 500 -r /etc/falco/falco_rules.local.yaml
+
+# Exit the node
+exit
 ```
 
-Scale the Deployment replicas to 0:
+Verification Step:
 
-```yaml
-kubectl scale deployment mem-hacker --replicas=0 -n default
+Monitor the incident file for detected events:
+
+```bash
+tail -f /opt/node-01/alerts/details
 ```
 
-Verify scaling:
+Confirm that each line follows the format: timestamp,uid/username,processName
 
-```yaml
-kubectl get deploy mem-hacker -n default
-```
+Ensure new container processes are detected within ~30 seconds of execution.
 
-Expected output:
+⚠️ Note:
 
-```yaml
-NAME         READY   UP-TO-DATE   AVAILABLE   AGE
-mem-hacker   0/0     0            0           1m
-```
+Falco rules can be customized to include or exclude specific containers or events.
 
-Explanation of Falco Rule:
+Ensure Falco has sufficient permissions to monitor container processes.
 
-Falco rules use system call fields to filter events. For /dev/mem monitoring:
+File-based logging path must exist (/opt/node-01/alerts/) and be writable by Falco.
 
-evt.is_open_read=true -> matches syscalls like open, openat, openat2, open_by_handle_at with read flag.
-
-evt.is_open_write=true -> same syscalls but with write flag.
-
-Combined condition detects attempts to open /dev/mem with read or write permissions.
-
-'-> If you also want to detect actual read/write operations:
-
-```yaml
-((evt.is_open_read=true or evt.is_open_write=true) or evt.type in (read, write)) and fd.name contains /dev/mem
-```
-
-'-> If you want to monitor only open attempts:
-
-```yaml
-(evt.is_open_read=true or evt.is_open_write=true) and fd.name contains /dev/mem
-```
-
-'' Common mistake:
-Writing something like:
-
-```yaml
-evt.is_open_read=true and evt.type=read
-```
-
-will never match, because evt.is_open_read exists only for open-related syscalls, not for read/write syscalls.
-
-'' Note:
-Created a Falco rule to detect /dev/mem access.
-
-Ran Falco and caught the malicious Pod.
-
-Identified the Deployment (mem-hacker).
-
-Scaled replicas to 0 to stop the attack.
-
-open_by_handle_at: this is a rare syscall used in advanced file APIs. Falco includes it so that rules reliably cover all ways a process might open a file.
-
-=======================================================
-EOF
+===============================================================
+CKS_SOLUTION_EOF

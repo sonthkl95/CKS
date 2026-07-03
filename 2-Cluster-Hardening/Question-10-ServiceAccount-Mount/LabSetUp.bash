@@ -1,9 +1,30 @@
 #!/bin/bash
-echo "[+] Initializing Lab Environment..."
-kubectl create namespace qakubectl --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace qa --dry-run=client -o yaml | kubectl apply -f -
+# LabSetUp.bash — prepares the environment for this task.
+# Run this first (paste into Killercoda or your practice cluster).
+
+echo "[+] Creating namespace 'qa'..."
+kubectl create ns qa --dry-run=client -o yaml | kubectl apply -f -
+echo "[+] Creating some unused ServiceAccounts to clean up later..."
+for sa in old-sa temp-sa frontend; do
+  kubectl create sa "$sa" -n qa --dry-run=client -o yaml | kubectl apply -f -
+done
+echo "[+] Writing the Pod manifest at /home/candidate/11/pod-manifest.yaml..."
 mkdir -p /home/candidate/11
-cat << 'EOF_MOCK' > /home/candidate/11/pod-manifest.yaml
-apiVersion: v1kind: Podmetadata:  name: frontend  namespace: qa  labels:    run: frontendspec:  serviceAccountName: frontend-sa  automountServiceAccountToken: false  containers:  - name: frontend    image: nginx
-EOF_MOCK
+cat > /home/candidate/11/pod-manifest.yaml <<'EOF'
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  namespace: qa
+  labels:
+    run: frontend
+spec:
+  serviceAccountName: frontend-sa   # <-- does not exist yet
+  containers:
+  - name: frontend
+    image: nginx:1.25-alpine
+EOF
+echo ""
+echo "[i] Task: create SA 'frontend-sa' (automount off) in ns 'qa', apply the manifest,"
+echo "    and delete unused ServiceAccounts."
 echo "[+] Lab Setup Complete."

@@ -1,17 +1,21 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 2 - Question 15
-=======================================================
+# Questions.bash  —  CKS Practice Test 2, Question 15
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-A Pod token-demo is running in the default namespace and uses the default mounted token.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 2  ·  Question 15
+===============================================================
 
-Modify the default ServiceAccount to disable automatic token mounting (automountServiceAccountToken: false).
+A Pod `token-demo` is running in the `default` namespace and uses the default mounted token.
+
+Modify the default `ServiceAccount` to disable automatic token mounting (`automountServiceAccountToken: false`).
 
 Edit the Pod to:
+
 Use this ServiceAccount.
 
-Mount a projected volume with the ServiceAccount token manually at /var/run/secrets/tokens/token.jwt.
+Mount a projected volume with the ServiceAccount token manually at `/var/run/secrets/tokens/token.jwt`.
 
-=======================================================
-EOF
+===============================================================
+CKS_TASK_EOF

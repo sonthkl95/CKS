@@ -1,29 +1,33 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 2 - Question 11
-=======================================================
+# Questions.bash  —  CKS Practice Test 1, Question 7
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-A CIS Benchmark scan revealed multiple violations on the API server, Kubelet, and etcd. Fix all findings by updating configuration files and restarting affected components.
-Violations to fix:
-API Server
-authorization-mode must not be AlwaysAllow.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 1  ·  Question 7
+===============================================================
 
-Must include Node.
+Fix multiple security violations identified by `kube-bench`.
 
-Must include RBAC.
+API Server:
 
-Kubelet
-Anonymous authentication must be disabled.
+Enable `RotateKubeletServerCertificate`.
 
-Authorization mode must not be AlwaysAllow; should use Webhook.
+Enable admission plugin `PodSecurityPolicy`.
 
-etcd
---client-cert-auth must be enabled.
+Set `--kubelet-certificate-authority` argument.
 
---auto-tls must not be enabled.
+Kubelet:
 
-Use valid TLS certificates (not self-signed).
+Disable anonymous authentication.
 
-=======================================================
-EOF
+Set `authorization-mode` to `Webhook`.
+
+ETCD:
+
+Ensure `--auto-tls` is not `true`.
+
+Ensure `--peer-auto-tls` is not `true`.
+
+===============================================================
+CKS_TASK_EOF

@@ -1,158 +1,111 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 2 - Question 16
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 1, Question 11
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
 
-Step 1: Enable the ImagePolicyWebhook plugin
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 1  ·  Question 11
+===============================================================
 
-```yaml
-ls /etc/kubernetes/imgconfig/
+The `ImagePolicyWebhook` ensures that only validated container images are allowed.
+
+Configuring it with `defaultAllow: false` enforces implicit deny, preventing use of unapproved or potentially vulnerable images.
+
+Commands / Steps
+
+```bash
+# Inspect the current configuration directory
+ls /etc/kubernetes/confcontrol
 ```
 
-Expected output:
-
-```yaml
-admission_configuration.yaml apiserver-client-key.pem apiserver-client.pem kubeconfig.yaml webhook-key.pem webhook.pem imagepolicyconfig.yaml
-```
-
-Edit /etc/kubernetes/imgconfig/admission_configuration.yaml:
-
-```yaml
----
+```bash
+# /etc/kubernetes/confcontrol/admission_configuration.yaml
 apiVersion: apiserver.config.k8s.io/v1
 kind: AdmissionConfiguration
 plugins:
-- name: ImagePolicyWebhook
-path: /etc/kubernetes/imgconfig/imgepolicyconfig.yaml
----
-# the path should be the absolute path not just imagepolicyconfig.yaml
+  - name: ImagePolicyWebhook
+    configuration:
+      imagePolicy:
+        kubeConfigFile: /etc/kubernetes/confcontrol/kubeconfig.yaml
+        allowTTL: 50
+        denyTTL: 50
+        retryBackoff: 500
+        defaultAllow: false
 ```
 
-Step 2: Configure the ImagePolicyWebhook admission plugin
-
-Edit /etc/kubernetes/imgconfig/imgepolicyconfig.yaml:
-
-```yaml
-imagePolicy:
-kubeConfigFile: /etc/kubernetes/imgconfig/kubeconfig.yaml
-allowTTL: 50
-denyTTL: 50
-retryBackoff: 500
-defaultAllow: false    # Implicit deny for all images not allowed
-```
-
-Step 3: Configure webhook endpoint in kubeconfig
-
-Edit /etc/kubernetes/imgconfig/kubeconfig.yaml:
-
-```yaml
+```bash
+# /etc/kubernetes/confcontrol/kubeconfig.yaml
 apiVersion: v1
 kind: Config
 clusters:
-- name: valhalla-scan
-cluster:
-certificate-authority: /etc/kubernetes/imgconfig/webhook.pem
-server: https://valhalla.local:8081/image_policy
+- name: test-server
+  cluster:
+    certificate-authority: /etc/kubernetes/confcontrol/webhook.pem
+    server: https://test-server.local.8081/image_policy
 users:
 - name: apiserver
-user:
-client-certificate: /etc/kubernetes/imgconfig/apiserver-client.pem
-client-key: /etc/kubernetes/imgconfig/apiserver-client-key.pem
+  user:
+    client-certificate: /etc/kubernetes/confcontrol/apiserver-client.pem
+    client-key: /etc/kubernetes/confcontrol/apiserver-client-key.pem
 contexts:
 - name: webhook-context
-context:
-cluster: valhalla-scan
-user: apiserver
+  context:
+    cluster: test-server
+    user: apiserver
 current-context: webhook-context
 ```
 
-Step 4: Enable admission plugin in kube-apiserver
+```bash
+# Update the kube-apiserver manifest to enable the admission plugin
+vim /etc/kubernetes/manifests/kube-apiserver.yaml
+```
 
-Edit /etc/kubernetes/manifests/kube-apiserver.yaml:
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-name: kube-apiserver
-namespace: kube-system
-spec:
-containers:
-- name: kube-apiserver
-command:
-- kube-apiserver
-- --admission-control=NodeRestriction,ImagePolicyWebhook
-- --admission-control-config-file=/etc/kubernetes/imgconfig/admission_configuration.yaml
+```bash
+# Relevant kube-apiserver.yaml snippet
+- --enable-admission-plugins=NodeRestriction,ImagePolicyWebhook
+- --admission-control-config-file=/etc/kubernetes/confcontrol/admission_configuration.yaml
 volumeMounts:
-- name: image-policy-config
-mountPath: /etc/kubernetes/imgconfig
-readOnly: true
+  - name: image-policy-config
+    mountPath: /etc/kubernetes/confcontrol
+    readOnly: true
 volumes:
-- name: image-policy-config
-hostPath:
-path: /etc/kubernetes/imgconfig
-type: DirectoryOrCreate
+  - name: image-policy-config
+    hostPath:
+      path: /etc/kubernetes/confcontrol
+      type: DirectoryOrCreate
 ```
 
-Step 5: Test the configuration
-
-Test using /root/16/vulnerable-resource.yaml:
-
-```yaml
----
-apiVersion: v1
-kind: ReplicationController
-metadata:
-labels:
-app: nginx-latest
-name: nginx-latest
-spec:
-replicas: 1
-template:
-metadata:
-labels:
-app: nginx-latest
-spec:
-containers:
-- image: nginx
-name: nginx-latest
-ports:
-- containerPort: 80
----
+```bash
+# Test the configuration by deploying a Pod with latest tag
+kubectl run pod-latest --image=nginx:latest
 ```
 
-```yaml
-kubectl apply -f /root/16/vulnerable-resource.yaml
+```bash
+# Expected output:
+Error from server (Forbidden): pods "pod-latest" is forbidden: image policy webhook backend denied one or more images: Images using latest tag are not allowed
 ```
 
-```yaml
-kubectl describe rc nginx-latest
+Verification Step:
+
+```bash
+# The Pod creation should be denied
+kubectl get pods -n default | grep pod-latest
 ```
 
-Expected output:
+⚠️ Note:
 
-```yaml
-Warning  FailedCreate  2m19s
-replication-controller  Error creating: pods "nginx-latest-k5fwg" is forbidden:
-image policy webhook backend denied one or more images: Images using latest tag are not allowed
-```
+Ensure `defaultAllow`: false is set to enforce implicit deny.
 
-Troubleshooting if kube-apiserver fails:
+The webhook requires a valid HTTPS endpoint with correct certificates.
 
-```yaml
+Use troubleshooting commands if kube-apiserver fails:
+
+```bash
 crictl ps -a | grep kube-api
 journalctl -u kubelet -f
 systemctl restart kubelet
 kubectl -n kube-system logs -l component=kube-apiserver
 ```
 
-'' Note:
-defaultAllow: false ensures implicit deny for any images not explicitly approved.
-
-HTTPS endpoint ensures secure communication between API server and the image policy webhook.
-
-Testing with a vulnerable image (e.g., latest tag) confirms the webhook is functional.
-
-=======================================================
-EOF
+===============================================================
+CKS_SOLUTION_EOF

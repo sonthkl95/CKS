@@ -1,0 +1,75 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {part}{I\hspace {1em}DOMAIN 1: KUBERNETES CLUSTER SETUP}{3}{part.1}%
+\contentsline {chapter}{\numberline {1}Domain 1: Cluster Setup}{4}{chapter.1}%
+\contentsline {section}{\numberline {1.1}CIS Benchmark va Thiet lap Moi truong Lab}{4}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}CIS Benchmark cho Kubernetes}{4}{subsection.1.1.1}%
+\contentsline {subsubsection}{CIS Benchmark la gi?}{4}{subsection.1.1.1}%
+\contentsline {subsubsection}{Mo hinh trach nhiem chia se (Shared Responsibility Model)}{4}{lstnumber.1.1.5}%
+\contentsline {subsection}{\numberline {1.1.2}Thiet lap Moi truong Lab}{5}{subsection.1.1.2}%
+\contentsline {subsubsection}{Yeu cau he thong}{5}{subsection.1.1.2}%
+\contentsline {subsubsection}{Cau hinh Firewall}{5}{subsection.1.1.2}%
+\contentsline {section}{\numberline {1.2}Kien truc Kubernetes va Bao mat etcd}{6}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}On lai Kien truc Kubernetes}{6}{subsection.1.2.1}%
+\contentsline {subsubsection}{Tong quan kien truc}{6}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Bao mat etcd}{6}{subsection.1.2.2}%
+\contentsline {subsubsection}{Tai sao etcd quan trong?}{6}{subsection.1.2.2}%
+\contentsline {subsubsection}{Cac moi de doa bao mat voi etcd}{7}{subsection.1.2.2}%
+\contentsline {paragraph}{Du lieu luu tru o dang plaintext (mac dinh)}{7}{subsection.1.2.2}%
+\contentsline {paragraph}{Ket noi khong ma hoa (HTTP)}{7}{lstnumber.1.2.3}%
+\contentsline {paragraph}{Thieu xac thuc Client}{7}{lstnumber.1.2.3}%
+\contentsline {subsubsection}{Giai phap bao mat toan dien cho etcd}{7}{lstnumber.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.3}Cai dat nhi phan etcd}{7}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}Certificate Authority va Co so ha tang Khoa cong khai}{8}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Tong quan ve Certificate Authority}{8}{subsection.1.3.1}%
+\contentsline {subsubsection}{Tai sao can CA trong Kubernetes?}{8}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Cau hinh Certificate Authority bang OpenSSL}{8}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Quy trinh phat hanh Chung chi da ky}{9}{subsection.1.3.3}%
+\contentsline {subsubsection}{Tong quan quy trinh 3 buoc}{9}{subsection.1.3.3}%
+\contentsline {subsubsection}{Thuc hanh: Tao chung chi cho user ``alice''}{9}{Item.9}%
+\contentsline {section}{\numberline {1.4}Bao mat etcd voi TLS va Systemd}{10}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}etcd -- Bao mat truyen tai voi HTTPS}{10}{subsection.1.4.1}%
+\contentsline {subsubsection}{Minh hoa nguy hiem cua HTTP}{10}{subsection.1.4.1}%
+\contentsline {subsubsection}{Tao chung chi TLS cho etcd va khoi dong HTTPS}{10}{lstnumber.1.7.10}%
+\contentsline {subsection}{\numberline {1.4.2}Tich hop etcd voi Systemd}{12}{subsection.1.4.2}%
+\contentsline {section}{\numberline {1.5}Bao mat API Server}{13}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Huong dan bao mat API Server}{13}{subsection.1.5.1}%
+\contentsline {subsubsection}{Cac quy tac CIS Benchmark quan trong}{13}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Cau hinh API Server}{13}{subsection.1.5.2}%
+\contentsline {subsection}{\numberline {1.5.3}Bao mat TLS cho API Server endpoint}{15}{subsection.1.5.3}%
+\contentsline {section}{\numberline {1.6}Kiem soat Truy cap, Xac thuc va Phan quyen}{16}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}Tong quan ve Access Control}{16}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}Xac thuc bang Static Token File}{16}{subsection.1.6.2}%
+\contentsline {subsubsection}{Cach hoat dong va nhuoc diem}{16}{subsection.1.6.2}%
+\contentsline {subsection}{\numberline {1.6.3}Xac thuc bang X.509 Client Certificates}{17}{subsection.1.6.3}%
+\contentsline {subsection}{\numberline {1.6.4}Phan quyen (Authorization) voi RBAC}{18}{subsection.1.6.4}%
+\contentsline {section}{\numberline {1.7}Encryption Provider va Audit Logging}{19}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}Encryption Provider -- Ma hoa du lieu tai cho}{19}{subsection.1.7.1}%
+\contentsline {subsubsection}{Van de: Secrets luu plaintext trong etcd}{19}{subsection.1.7.1}%
+\contentsline {subsubsection}{Cau hinh Encryption Provider}{19}{lstnumber.1.18.11}%
+\contentsline {subsection}{\numberline {1.7.2}Trien khai Audit Logging}{21}{subsection.1.7.2}%
+\contentsline {subsubsection}{Tai sao can Audit Logging?}{21}{subsection.1.7.2}%
+\contentsline {section}{\numberline {1.8}Kubeadm, Taints/Tolerations va Kubelet Security}{22}{section.1.8}%
+\contentsline {subsection}{\numberline {1.8.1}Thiet lap Cluster bang Kubeadm}{22}{subsection.1.8.1}%
+\contentsline {subsection}{\numberline {1.8.2}Taints va Tolerations}{24}{subsection.1.8.2}%
+\contentsline {subsubsection}{Khai niem co ban}{24}{subsection.1.8.2}%
+\contentsline {subsection}{\numberline {1.8.3}Bao mat Kubelet}{25}{subsection.1.8.3}%
+\contentsline {subsubsection}{Nguyen co bao mat cua Kubelet API}{25}{subsection.1.8.3}%
+\contentsline {section}{\numberline {1.9}Tong ket va Checklist Bao mat}{26}{section.1.9}%
+\contentsline {subsection}{\numberline {1.9.1}Checklist Bao mat Cluster}{26}{subsection.1.9.1}%
+\contentsline {subsubsection}{etcd Security}{26}{subsection.1.9.1}%
+\contentsline {subsubsection}{API Server Security}{27}{subsection.1.9.1}%
+\contentsline {subsubsection}{Kubelet Security}{27}{subsection.1.9.1}%
+\contentsline {subsubsection}{Tong quat}{27}{subsection.1.9.1}%
+\contentsline {subsection}{\numberline {1.9.2}Tom tat quy trinh PKI trong Kubernetes}{27}{subsection.1.9.2}%
+\contentsline {section}{\numberline {1.10}Xac minh Platform Binaries va Ingress}{28}{section.1.10}%
+\contentsline {subsection}{\numberline {1.10.1}Xac minh Platform Binaries}{28}{subsection.1.10.1}%
+\contentsline {subsection}{\numberline {1.10.2}Ingress va TLS}{28}{subsection.1.10.2}%
+\contentsline {subsubsection}{Overview of Ingress voi TLS}{28}{subsection.1.10.2}%
+\contentsline {subsubsection}{Ingress Annotation - SSL Redirect}{28}{lstnumber.1.29.7}%
+\contentsline {section}{\numberline {1.11}Network Policies va Kubeadm}{29}{section.1.11}%
+\contentsline {subsection}{\numberline {1.11.1}Network Policies}{29}{subsection.1.11.1}%
+\contentsline {subsubsection}{Cau truc cua Network Policy}{29}{subsection.1.11.1}%
+\contentsline {subsubsection}{Except, Port va Protocol}{30}{lstnumber.1.31.20}%
+\contentsline {subsection}{\numberline {1.11.2}Kubeadm Structure va Troubleshooting}{31}{subsection.1.11.2}%
+\contentsline {subsubsection}{Cau truc thu muc cua Kubeadm}{31}{subsection.1.11.2}%
+\contentsline {subsubsection}{Kubeadm Troubleshooting}{31}{subsection.1.11.2}%

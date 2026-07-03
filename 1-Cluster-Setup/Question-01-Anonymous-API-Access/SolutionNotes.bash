@@ -1,27 +1,30 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 1 - Question 4
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 1, Question 4
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
+
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 1  ·  Question 4
+===============================================================
 
 Step 1: Secure kube-apiserver configuration
 
-Edit /etc/kubernetes/manifests/kube-apiserver.yaml:
+Edit `/etc/kubernetes/manifests/kube-apiserver.yaml`:
 
-```yaml
+```bash
 - --authorization-mode=Node,RBAC
 - --enable-admission-plugins=NodeRestriction
 - --anonymous-auth=false
 - --client-ca-file=/etc/kubernetes/pki/ca.crt
 ```
 
-Remove any insecure options such as AlwaysAllow or AlwaysAdmit.
+Remove any insecure options such as `AlwaysAllow`or `AlwaysAdmit`.
 
-Step 2: Remove anonymous ClusterRoleBinding
+Step 2: Remove `anonymous`ClusterRoleBinding
 
 Check and delete:
 
-```yaml
+```bash
 kubectl get clusterrolebinding | grep 'system:anonymous'
 kubectl delete clusterrolebinding system:anonymous
 ```
@@ -30,20 +33,21 @@ Step 4: Verify
 
 Check system pods to confirm access works with authenticated config:
 
-```yaml
+```bash
 kubectl get pods -n kube-system --kubeconfig /etc/kubernetes/admin.conf
 ```
 
-'' Note:
-Setting --anonymous-auth=false ensures no unauthenticated requests are processed.
+⚠️ Note:
 
-Authorization is now enforced via Node + RBAC.
+Setting `--anonymous-auth=false` ensures no unauthenticated requests are processed.
 
-NodeRestriction admission controller prevents kubelets from modifying objects outside their scope.
+Authorization is now enforced via `Node + RBAC`.
 
---client-ca-file ensures secure communication between API server and clients.
+`NodeRestriction` admission controller prevents kubelets from modifying objects outside their scope.
 
-After cleanup, only authenticated + authorized users (e.g., kubernetes-admin) can access the cluster
+`--client-ca-file` ensures secure communication between API server and clients.
 
-=======================================================
-EOF
+After cleanup, only `authenticated + authorized` users (e.g., `kubernetes-admin`) can access the cluster
+
+===============================================================
+CKS_SOLUTION_EOF

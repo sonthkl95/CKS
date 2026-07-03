@@ -1,11 +1,36 @@
 #!/bin/bash
-echo "[+] Initializing Lab Environment..."
+# LabSetUp.bash — prepares the environment for this task.
+# Run this first (paste into Killercoda or your practice cluster).
+
+echo "[+] Writing the Dockerfile and Deployment manifest at /home/candidate/10 ..."
 mkdir -p /home/candidate/10
-cat << 'EOF_MOCK' > /home/candidate/10/Dockerfile
-FROM ubuntu:16.04     # -> Fixed: pin to a specific Ubuntu version USER root             # Default user for package installation RUN apt-get update && \    apt-get install -y --no-install-recommends \    runit=2.1.2-3ubuntu1 wget=1.17.1-1ubuntu1.5 \    chrpath=0.16-1 tdata=2020a-0ubuntu0.16.04 lsof=4.89.dfsg.0-1 \    lsb-release=9.20160110ubuntu3 sysstat=11.2.0-1ubuntu0.3 \    net-tools=1.60-26ubuntu1 numactl=2.0.11-1ubuntu1.1 bzip2=1.0.6-8.1ubuntu0.2 && \    apt-get autoremove -y && apt-get clean && \    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ARG COUCH_VERSION=6.5.1ARG COUCH_BASE_URL=https://packages.couchbase.com/releases/6.5.1ARG COUCH_FILE=couchbase-server-enterprise_6.5.1-ubuntu16.04_amd64.debARG COUCH_SHA256=91a301f3c5e574f9c5db5ac0f13fac5dc34639f176c41f26047ee6 ENV PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install RUN groupadd -g 1001 cbgroup && useradd -u 1001 -g cbgroup -M cbuser SHELL ["/bin/bash", "-o", "pipefail", "-c"] RUN export INSTALL_SKIP_START=1 && \    wget -q -O ${COUCH_FILE} ${COUCH_BASE_URL}/${COUCH_FILE} && \    echo "${COUCH_SHA256}  ${COUCH_FILE}" | sha256sum -c - && \    dpkg -i ${COUCH_FILE} && \    rm -f ${COUCH_FILE} COPY scripts/etc/service/couchbase-server/run /etc/service/couchbase-server/runCOPY scripts/dummy.sh /usr/local/bin/COPY scripts/entrypoint.sh /COPY scripts/bin/iptables-save /usr/local/bin/iptables-saveCOPY scripts/bin/ip6tables-save /usr/local/bin/ip6tables-saveCOPY scripts/bin/vidisplay /usr/local/bin/vidisplayCOPY scripts/bin/pvidisplay /usr/local/bin/pvidisplay RUN chrpath -r "\$ORIGIN/../lib" /opt/couchbase/bin/curl ENTRYPOINT ["/entrypoint.sh"] USER nobody     # -> Fixed: run container as unprivileged user (UID 65535) CMD ["couchbase-server"] EXPOSE 8091-8096 11210 11211 18091-18096VOLUME /opt/couchbase/var
-EOF_MOCK
-mkdir -p /home/candidate/10
-cat << 'EOF_MOCK' > /home/candidate/10/deployment.yaml
-FROM ubuntu:16.04     # -> Fixed: pin to a specific Ubuntu version USER root             # Default user for package installation RUN apt-get update && \    apt-get install -y --no-install-recommends \    runit=2.1.2-3ubuntu1 wget=1.17.1-1ubuntu1.5 \    chrpath=0.16-1 tdata=2020a-0ubuntu0.16.04 lsof=4.89.dfsg.0-1 \    lsb-release=9.20160110ubuntu3 sysstat=11.2.0-1ubuntu0.3 \    net-tools=1.60-26ubuntu1 numactl=2.0.11-1ubuntu1.1 bzip2=1.0.6-8.1ubuntu0.2 && \    apt-get autoremove -y && apt-get clean && \    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ARG COUCH_VERSION=6.5.1ARG COUCH_BASE_URL=https://packages.couchbase.com/releases/6.5.1ARG COUCH_FILE=couchbase-server-enterprise_6.5.1-ubuntu16.04_amd64.debARG COUCH_SHA256=91a301f3c5e574f9c5db5ac0f13fac5dc34639f176c41f26047ee6 ENV PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install RUN groupadd -g 1001 cbgroup && useradd -u 1001 -g cbgroup -M cbuser SHELL ["/bin/bash", "-o", "pipefail", "-c"] RUN export INSTALL_SKIP_START=1 && \    wget -q -O ${COUCH_FILE} ${COUCH_BASE_URL}/${COUCH_FILE} && \    echo "${COUCH_SHA256}  ${COUCH_FILE}" | sha256sum -c - && \    dpkg -i ${COUCH_FILE} && \    rm -f ${COUCH_FILE} COPY scripts/etc/service/couchbase-server/run /etc/service/couchbase-server/runCOPY scripts/dummy.sh /usr/local/bin/COPY scripts/entrypoint.sh /COPY scripts/bin/iptables-save /usr/local/bin/iptables-saveCOPY scripts/bin/ip6tables-save /usr/local/bin/ip6tables-saveCOPY scripts/bin/vidisplay /usr/local/bin/vidisplayCOPY scripts/bin/pvidisplay /usr/local/bin/pvidisplay RUN chrpath -r "\$ORIGIN/../lib" /opt/couchbase/bin/curl ENTRYPOINT ["/entrypoint.sh"] USER nobody     # -> Fixed: run container as unprivileged user (UID 65535) CMD ["couchbase-server"] EXPOSE 8091-8096 11210 11211 18091-18096VOLUME /opt/couchbase/var
-EOF_MOCK
+cat > /home/candidate/10/Dockerfile <<'EOF'
+FROM ubuntu:latest
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends runit wget && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY scripts/entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["couchbase-server"]
+EOF
+cat > /home/candidate/10/deployment.yaml <<'EOF'
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: couchbase, namespace: default }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: couchbase } }
+  template:
+    metadata: { labels: { app: couchbase } }
+    spec:
+      containers:
+      - name: couchbase
+        image: couchbase:latest
+        securityContext:
+          privileged: true
+          runAsUser: 0
+EOF
+echo ""
+echo "[i] Task: fix TWO issues in each file (no adding/removing fields). Use user 'nobody' (UID 65535) where needed."
 echo "[+] Lab Setup Complete."

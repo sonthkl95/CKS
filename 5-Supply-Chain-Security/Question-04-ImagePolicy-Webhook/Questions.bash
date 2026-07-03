@@ -1,18 +1,17 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 2 - Question 16
-=======================================================
+# Questions.bash  —  CKS Practice Test 1, Question 11
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Integrate the cluster's container image scanner to reject vulnerable images.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 1  ·  Question 11
+===============================================================
 
-Configure the ImagePolicyWebhook admission plugin with HTTPS endpoint https://valhalla.local:8081/image_policy.
+The cluster has a container image scanner webhook but its configuration is incomplete.
 
-Enforce implicit deny for images not explicitly allowed.
+Current configuration is in `/etc/kubernetes/confcontrol` directory.
 
-Test using /root/16/vulnerable-resource.yaml.
+Enable the ImagePolicy admission plugin, set it to deny all non-compliant images (implicit deny), and test the configuration by attempting to deploy a Pod using the `latest` image tag.
 
-File path to the webhook configuration: /etc/kubernetes/imgconfig/.
-
-=======================================================
-EOF
+===============================================================
+CKS_TASK_EOF

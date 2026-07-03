@@ -1,14 +1,17 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 2 - Question 14
-=======================================================
+# Questions.bash  —  CKS Practice Test 2, Question 14
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Modify the existing Role bound to ServiceAccount sa-dev-1 (used by Pod web-pod in namespace security) to allow only watch on services.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 2  ·  Question 14
+===============================================================
 
-Create a new ClusterRole role-2 to allow only update on namespaces.
+Modify the existing `Role` bound to ServiceAccount `sa-dev-1` (used by Pod `web-pod` in namespace `security`) to allow only `watch` on `services`.
 
-Bind it via a ClusterRoleBinding named role-2-binding to the ServiceAccount sa-dev-1.
+Create a new `ClusterRole` `role-2` to allow only `update` on `namespaces`.
 
-=======================================================
-EOF
+Bind it via a `ClusterRoleBinding` named `role-2-binding` to the ServiceAccount `sa-dev-1`.
+
+===============================================================
+CKS_TASK_EOF

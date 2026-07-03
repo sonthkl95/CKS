@@ -1,11 +1,15 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 3 - Question 6
-=======================================================
+# Questions.bash  —  CKS Practice Test 3, Question 6
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Create a service account named backend-qa in the qa namespace that cannot access any secrets.
-Update the existing frontend Pod to use this service account.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 3  ·  Question 6
+===============================================================
 
-=======================================================
-EOF
+Create a service account named `backend-qa` in the `qa` namespace that cannot access any secrets.
+
+Update the existing `frontend` Pod to use this service account.
+
+===============================================================
+CKS_TASK_EOF

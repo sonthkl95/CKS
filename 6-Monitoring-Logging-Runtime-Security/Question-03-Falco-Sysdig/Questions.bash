@@ -1,12 +1,26 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  CKS Practice Test 1 - Question 16
-=======================================================
+# Questions.bash  —  CKS Practice Test 2, Question 4
+# Source: Udemy CKS Practice Tests (lab/*.mhtml)
 
-Cluster security monitoring revealed that a malicious container is attempting to access /dev/mem, which represents direct access to physical memory.
-Such activity is highly dangerous as it may lead to privilege escalation or kernel bypass.
-Use Falco (or sysdig) to detect the malicious Pod and its Deployment, then scale the Deployment replicas to 0 to stop the workload.
+cat << 'CKS_TASK_EOF'
+===============================================================
+  CKS Practice Test 2  ·  Question 4
+===============================================================
 
-=======================================================
-EOF
+Monitor container behavior on a worker node using Falco or any similar tool to detect newly spawning and executing processes:
+
+Analyze containers for at least 30 seconds using process execution filters.
+
+Store detected incidents in `/opt/node-01/alerts/details` in the format: `timestamp,uid/username,processName`.
+
+Example of a properly formatted incident file:
+
+```bash
+2025-08-10T17:45:17.123Z,root,init
+2025-08-10T17:45:20.124Z,1001,bash
+2025-08-10T17:45:25.125Z,1002,sleep
+2025-08-10T17:45:30.125Z,1010,curl
+```
+
+===============================================================
+CKS_TASK_EOF

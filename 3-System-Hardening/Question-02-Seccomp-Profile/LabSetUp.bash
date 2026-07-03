@@ -42,4 +42,4 @@ echo "   1. Create /var/lib/kubelet/seccomp/profiles/custom-profile.json"
 echo "   2. Edit the Deployment 'webapp' to use this Seccomp profile"
 echo ""
 echo "💡 Hint - Seccomp JSON structure:"
-echo ->   {"defaultAction":"SCMP_ACT_ERRNO","syscalls":[{"names":["read","write","exit"],"action":"SCMP_ACT_ALLOW"}]}'
+echo '   {"defaultAction":"SCMP_ACT_ERRNO","syscalls":[{"names":["read","write","exit","sigreturn"],"action":"SCMP_ACT_ALLOW"}]}'

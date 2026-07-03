@@ -1,139 +1,100 @@
 #!/bin/bash
-cat << 'EOF'
-=======================================================
-  Solution for Test 2 - Question 11
-=======================================================
+# SolutionNotes.bash  —  CKS Practice Test 1, Question 7
+# Source: Udemy CKS Practice Tests (lab/*.mhtml) — official 'Correct answer' explanation
 
-The API server controls cluster authentication/authorization. CIS requires strict authorization modes (Node, RBAC).
+cat << 'CKS_SOLUTION_EOF'
+===============================================================
+  SOLUTION  ·  CKS Practice Test 1  ·  Question 7
+===============================================================
 
-The Kubelet must not allow unauthenticated access; it should authenticate via the API server (Webhook).
+Step 1: Run kube-bench checks
 
-etcd is critical for Kubernetes state storage and must enforce TLS + client certificate authentication.
-
-Steps
-1. Fix API Server configuration
-
-```yaml
-vim /etc/kubernetes/manifests/kube-apiserver.yaml
+```bash
+kube-bench run --targets=master,node,etcd
+# Run master checks (apiserver, controller-manager, scheduler, etcd, kubelet-on-master)
+kube-bench run --targets=master
+# Run node (kubelet) checks
+kube-bench run --targets=node --check "4.*"
+# Run etcd checks
+kube-bench run --targets=etcd
 ```
 
-```yaml
+Step 2: Fix API Server configuration
+
+Edit `/etc/kubernetes/manifests/kube-apiserver.yaml`:
+
+```bash
 # /etc/kubernetes/manifests/kube-apiserver.yaml (flags section)
 - --authorization-mode=Node,RBAC
+- --feature-gates=RotateKubeletServerCertificate=true
+- --enable-admission-plugins=...,PodSecurityPolicy
+- --kubelet-certificate-authority=/etc/kubernetes/pki/ca.crt
 ```
 
-```yaml
-' Removed AlwaysAllow.
-' Added Node and RBAC.
-The static pod will restart automatically after saving.
+Step 3: Fix Kubelet configuration
+
+Check kubelet process:
+
+```bash
+ps -ef | grep kubelet
 ```
 
-2. Fix Kubelet configuration
+Edit `/var/lib/kubelet/config.yaml`:
 
-```yaml
-ps -ef | grep kubelet   # locate kubelet config file path
-vim /var/lib/kubelet/config.yaml
-```
-
-```yaml
-# /var/lib/kubelet/config.yaml
-apiVersion: kubelet.config.k8s.io/v1beta1
-kind: KubeletConfiguration
+```bash
 authentication:
-anonymous:
-enabled: false          # '-> Disable anonymous auth
-webhook:
-enabled: true           # -> Enable API server webhook
-x509:
-clientCAFile: /etc/kubernetes/pki/ca.crt
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+
 authorization:
-mode: Webhook             # '-> Use centralized authorization
+  mode: Webhook
 ```
 
-```yaml
-' Disabled anonymous authentication.
-' Set authorization mode to Webhook.
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl restart kubelet
 ```
 
-```yaml
-# Reload and restart Kubelet:
-systemctl daemon-reload
-systemctl restart kubelet
-systemctl status kubelet
-```
+Step 4: Fix ETCD configuration
 
-3. Fix etcd configuration
+Edit `/etc/kubernetes/manifests/etcd.yaml`:
 
-```yaml
-vim /etc/kubernetes/manifests/etcd.yaml
-```
-
-```yaml
+```bash
 # /etc/kubernetes/manifests/etcd.yaml (flags section)
-- --cert-file=/etc/kubernetes/pki/etcd/server.crt
-- --key-file=/etc/kubernetes/pki/etcd/server.key
-- --client-cert-auth=true         # -> Enforce client cert auth
-- --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
-- --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
-- --peer-client-cert-auth=true    # -> Mutual peer authentication
-- --auto-tls=false                # -> Do not auto-generate TLS
+- --auto-tls=false
+- --peer-auto-tls=false
 ```
 
-```yaml
-' Enabled client cert auth.
-' Enabled peer client cert auth.
-' Disabled auto-tls.
-Ensure etcd is using `valid CA-signed` certs stored in /etc/kubernetes/pki/etcd/.
-Static pod will restart automatically after saving.
-```
+Step 5: Verify fixes
 
-4. Verify CIS compliance
-
-```yaml
-# Check API Server flags
-ps -ef | grep kube-apiserver | grep authorization-mode
-# Should show `Node,RBAC`:
---authorization-mode=Node,RBAC
-```
-
-```yaml
-# Check Kubelet config
-curl -sk https://127.0.0.1:10250/metrics | head -n 5
-Should `fail` without auth
-```
-
-```yaml
-kubectl get --raw /api/v1/nodes | jq .
-Should work (via authenticated request)
-```
-
-```yaml
-# Check etcd flags
-ps -ef | grep etcd | grep cert
-Should include `--client-cert-auth=true` and `--auto-tls=false`
-```
-
-```yaml
-# Rerun CIS scan kube-bench
+```bash
 kube-bench run --targets=master,node,etcd
+kubectl get pods -n kube-system
 ```
 
-```yaml
-- target master -> checks kube-apiserver, kube-controller-manager, scheduler, etcd, kubelet (on master)
-- target node -> checks kubelet, kube-proxy, cni (on nodes)
-- target etcd -> checks etcd (certs, access, etc)
-Expected: -> all listed violations resolved.
-Should show `PASS` for all findings.
-```
+Issues Fixed:
 
-'' Note:
-AlwaysAllow is insecure and must not be used.
+API Server:
 
-Node ensures kubelet-to-apiserver communication authorization.
+Enforced `RotateKubeletServerCertificate=true`.
 
-RBAC enforces role-based access control for users and workloads.
+Added admission plugin `PodSecurityPolicy`.
 
-etcd without TLS is a critical security risk -> certificates are mandatory
+Configured `--kubelet-certificate-authority` for secure kubelet communication.
 
-=======================================================
-EOF
+Kubelet:
+
+Disabled anonymous authentication.
+
+Configured `authorization-mode=Webhook`
+
+ETCD:
+
+Disabled `--auto-tls` and `--peer-auto-tls` to prevent insecure self-signed certs.
+
+===============================================================
+CKS_SOLUTION_EOF
