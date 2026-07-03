@@ -17,7 +17,7 @@ fi
 
 if [[ ! -d "$QUESTION_DIR" ]]; then
   echo "❌ Directory '$QUESTION_DIR' not found."
-  echo "Usage example: bash scripts/run-lab.sh 1-Cluster-Setup/Question-04-Anonymous-API-Access"
+  echo "Usage example: bash scripts/run-lab.sh 1-Cluster-Setup/Question-01-Anonymous-API-Access"
   exit 1
 fi
 
